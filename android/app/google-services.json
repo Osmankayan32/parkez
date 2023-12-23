@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "375764479391",
+    "project_id": "parkez-90eae",
+    "storage_bucket": "parkez-90eae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375764479391:android:be32f27e9c609a561d21aa",
+        "android_client_info": {
+          "package_name": "com.example.login_screen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkTpmFcxVvesr81vyXlliaVRTnpjsOcHg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
