@@ -153,7 +153,7 @@ class _LoginContentState extends State<LoginContent>
       inputField(_tName, 'İsim', Ionicons.person_outline),
       inputField(_tEmail, 'Email', Ionicons.mail_outline),
       inputField(_tPassword, 'Şifre', Ionicons.lock_closed_outline),
-      actionButton('Kayıt Ol', onTap: () => locator.get<AuthService>().signUp(context, name: _tName.text, email: _tEmail.text, password: _tPassword.text),),
+      actionButton('Kayıt Ol', onTap: () => getIt.get<AuthService>().signUp(context, name: _tName.text, email: _tEmail.text, password: _tPassword.text),),
       orDivider(),
       logos(),
     ];
@@ -161,7 +161,7 @@ class _LoginContentState extends State<LoginContent>
     loginContent = [
       inputField(_tEmail, 'Email', Ionicons.mail_outline),
       inputField(_tPassword, 'Şifre', Ionicons.lock_closed_outline),
-      actionButton('Giriş Yap', onTap: () => locator.get<AuthService>().signIn(context, email: _tEmail.text, password: _tPassword.text),),
+      actionButton('Giriş Yap', onTap: () => getIt.get<AuthService>().signIn(context, email: _tEmail.text, password: _tPassword.text),),
       forgotPassword(),
     ];
 
