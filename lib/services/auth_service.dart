@@ -28,7 +28,7 @@ class AuthService {
       final UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.user != null) {
         isSignedIn = true;
-        navigator.push(MaterialPageRoute(builder: (context) => HomeScreen(),));
+        navigator.pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen(),));
       }
     } on FirebaseAuthException catch(e) {
       Fluttertoast.showToast(msg: e.message!, toastLength: Toast.LENGTH_LONG);
@@ -49,5 +49,10 @@ class AuthService {
      return user;
     }
     return null;
+  }
+
+  Future<void> signOut() async {
+    await firebaseAuth.signOut();
+    isSignedIn = false;
   }
 }

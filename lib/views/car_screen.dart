@@ -24,7 +24,7 @@ class _CarScreenState extends State<CarScreen> {
   void _fetchCars() async {
     final user = _auth.currentUser;
     if (user != null) {
-      final docRef = _firestore.collection('users').doc(user.uid);
+      final docRef =      _firestore.collection('users').doc(user.uid);
       final snapshot = await docRef.get();
       if (snapshot.exists) {
         final data = snapshot.data() as Map<String, dynamic>;
