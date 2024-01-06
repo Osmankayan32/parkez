@@ -3,7 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:login_screen/locator.dart';
+import 'package:login_screen/services/locator.dart';
 import 'package:login_screen/services/auth_service.dart';
 import 'package:login_screen/utils/enums.dart';
 

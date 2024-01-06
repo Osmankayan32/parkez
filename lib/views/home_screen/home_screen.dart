@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login_screen/views/profile_screen/profile_screen.dart';
+import 'package:login_screen/views/vehicle_screen/vehicle_screen.dart';
 import 'package:login_screen/widgets/custom_buton.dart';
-import '../car_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CarScreen()),
+                    MaterialPageRoute(builder: (context) => const VehicleSecreen()),
                   ); // "Araç Seç" butonuna basıldığında yapılacak işlemler
                 },
                 width: 200,
@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CarScreen()),
+                    MaterialPageRoute(builder: (context) => const VehicleSecreen()),
                   ); // "Araç Seç" butonuna basıldığında yapılacak işlemler
                 },
                 width: 200,

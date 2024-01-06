@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:login_screen/locator.dart';
+import 'package:login_screen/services/locator.dart';
 import 'package:login_screen/services/auth_service.dart';
 import 'package:login_screen/views/login_screen/login_screen.dart';
 

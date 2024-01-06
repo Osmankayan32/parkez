@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:login_screen/locator.dart';
+import 'package:login_screen/services/locator.dart';
 import 'package:login_screen/themes/light_theme.dart';
 import 'package:login_screen/views/login_screen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';

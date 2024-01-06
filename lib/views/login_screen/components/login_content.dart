@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:login_screen/locator.dart';
+import 'package:login_screen/services/locator.dart';
 import 'package:login_screen/services/auth_service.dart';
 import 'package:login_screen/utils/helper_functions.dart';
 import '../../../utils/constants.dart';
