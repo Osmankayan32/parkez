@@ -5,6 +5,7 @@ import 'package:login_screen/services/firestore_services.dart';
 final getIt = GetIt.instance;
 
 void setupLocator() {
-  getIt.registerSingleton<AuthService>(AuthService());
+
   getIt.registerSingleton<FireStoreServices>(FireStoreServices());
+  getIt.registerSingleton<AuthService>(AuthService());
 }

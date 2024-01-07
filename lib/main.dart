@@ -5,6 +5,8 @@ import 'package:login_screen/themes/light_theme.dart';
 import 'package:login_screen/views/login_screen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'views/login_screen/yeni_giriş_ekranı.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
