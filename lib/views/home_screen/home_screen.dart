@@ -10,6 +10,8 @@ import 'package:login_screen/views/vehicle_screen/controller/vehicle_controller.
 import 'package:login_screen/views/vehicle_screen/vehicle_screen.dart';
 import 'package:login_screen/widgets/custom_buton.dart';
 
+import '../park_screen/park_screen.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -62,6 +64,13 @@ class HomeScreen extends StatelessWidget {
                   child: const Text("Araç Seç", style: TextStyle(fontSize: 18, color: Colors.white)),
                 );
               }),
+              CustomButon(onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ParkScreen()),
+                );
+
+              }, child:  Text("Otaparklar", style: TextStyle(fontSize: 18, color: Colors.white)), width: 200,),
               CustomButon(
                 onTap: () async {
                   Navigator.push(
