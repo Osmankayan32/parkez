@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login_screen/models/user_model.dart';
 import 'package:login_screen/models/vehicle_model.dart';
 
@@ -11,9 +12,20 @@ class _CollectionPath {
 
 class FireStoreServices {
   final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getVehicles() {
-    final vehiceles = _firestore.collection(_CollectionPath.vehicles).snapshots();
+    User? user = _auth.currentUser;
+    if(user == null){
+      return Stream.empty();
+    }
+    final vehiceles = _firestore
+        .collection(_CollectionPath.vehicles)
+        .where(
+          "uid",
+          isEqualTo: user.uid,
+        )
+        .snapshots();
 
     return vehiceles;
   }

@@ -14,7 +14,6 @@ class VehicleSecreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(title: const Text("Araçlar")),
         floatingActionButton: Consumer(builder: (context, ref, child) {
@@ -98,6 +97,8 @@ class VehicleSecreen extends StatelessWidget {
                             width: 200,
                             onTap: () {
                               controller.addVehicle();
+                              //TODO : İŞlem Başarlı ise animasyon göster
+                              Navigator.pop(context);
                             },
                             child: const Text("Kaydet", style: TextStyle(fontSize: 18, color: Colors.white)),
                           ),
