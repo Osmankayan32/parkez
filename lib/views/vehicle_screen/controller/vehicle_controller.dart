@@ -18,6 +18,7 @@ class VehicleController extends ChangeNotifier {
    int vehicleType = 0;
   late FireStoreServices _fireStoreServices;
   late AuthService _authService;
+  VehicleModel? seciliArac;
 
   VehicleController() {
     _fireStoreServices = getIt<FireStoreServices>();
@@ -47,5 +48,10 @@ class VehicleController extends ChangeNotifier {
 
     bool isAdd = await _fireStoreServices.addVehicle(model: vehicleModel);
     return isAdd;
+  }
+
+  void selectVehicle(VehicleModel vehicleModel){
+    seciliArac = vehicleModel;
+    notifyListeners();
   }
 }

@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:login_screen/models/vehicle_model.dart';
 import 'package:login_screen/services/firestore_services.dart';
 import 'package:login_screen/services/locator.dart';
 import 'package:login_screen/views/profile_screen/profile_screen.dart';
+import 'package:login_screen/views/vehicle_screen/controller/vehicle_controller.dart';
 import 'package:login_screen/views/vehicle_screen/vehicle_screen.dart';
 import 'package:login_screen/widgets/custom_buton.dart';
 
@@ -11,11 +16,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        getIt<FireStoreServices>().userListGet();
-      }),
       appBar: AppBar(
-        title: const Text('Ana Ekran'),
+        title: const Text('Hoşgeldiniz'),
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle),
@@ -36,24 +38,38 @@ class HomeScreen extends StatelessWidget {
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              const Text("Hoşgeldiniz", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.start),
+              Consumer(builder: (context, ref, child) {
+                VehicleModel? vehicle = ref.watch(vehicleController.select((value) => value.seciliArac));
+
+                return vehicle == null ? const SizedBox.shrink() : Text(
+                  "${vehicle.aracName} - ${vehicle.plaka}" ?? "plaka null geldi", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.start,);
+              }),
               Image.asset("assets/images/City driver-pana.png"),
+
+              Consumer(builder: (context, ref, child) {
+                final controller = ref.read(vehicleController);
+                return CustomButon(
+                  onTap: () async {
+                    final response = await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const VehicleSecreen()),
+                    );
+                    if(response == null) return;
+                    final vehicleModel = VehicleModel.fromJson(response);
+                    controller.selectVehicle(vehicleModel);
+                  },
+                  width: 200,
+                  child: const Text("Araç Seç", style: TextStyle(fontSize: 18, color: Colors.white)),
+                );
+              }),
               CustomButon(
-                onTap: () {
+                onTap: () async {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const VehicleSecreen()),
-                  ); // "Araç Seç" butonuna basıldığında yapılacak işlemler
-                },
-                width: 200,
-                child: const Text("Araç Seç", style:  TextStyle(fontSize: 18, color: Colors.white)),
-              ),
-              CustomButon(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const VehicleSecreen()),
-                  ); // "Araç Seç" butonuna basıldığında yapılacak işlemler
+                  );
+
+                  // "Araç Seç" butonuna basıldığında yapılacak işlemler
                 },
                 width: 200,
                 child: const Text("Randevularım", style: const TextStyle(fontSize: 18, color: Colors.white)),
