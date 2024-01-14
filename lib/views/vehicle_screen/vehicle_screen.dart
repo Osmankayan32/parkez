@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login_screen/models/vehicle_model.dart';
+import 'package:login_screen/themes/light_theme.dart';
 import 'package:login_screen/utils/constants.dart';
 import 'package:login_screen/views/vehicle_screen/controller/vehicle_controller.dart';
 import 'package:login_screen/views/vehicle_screen/widgets/vehicle_detail_cart.dart';
@@ -65,6 +66,8 @@ class VehicleSecreen extends StatelessWidget {
 
   FloatingActionButton aracEklemeButonu(BuildContext context, VehicleController controller, WidgetRef ref) {
     return FloatingActionButton(
+        backgroundColor: Themes.primaryColor,
+
         child: const Icon(Icons.add),
         onPressed: () {
           showModalBottomSheet(

@@ -21,7 +21,7 @@ class KullaniciParkDetayScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: Text(otoparkModel!.otoparkIsmi!)),
         body: Consumer(builder: (context, ref, child) {
-          final controller = ref.watch(kullaniciParkController);
+          final controller = ref.read(kullaniciParkController);
           return StreamBuilder<DocumentSnapshot>(
               stream: controller.otoparkGetir(otoparkModel.firebaseId!),
               builder: (context, snapshot) {
@@ -39,11 +39,11 @@ class KullaniciParkDetayScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Consumer(builder: (context, ref, child) {
-                        final controller = ref.watch(kullaniciParkController);
+                        final controller = ref.read(kullaniciParkController);
                         return PageView.builder(
                             itemCount: data.katlar!.length,
                             onPageChanged: (index) {
-                              controller.aktifIndexiDegistir(index);
+                              controller.aktifKatIndexAta(index);
                             },
                             itemBuilder: (context, index) {
                               OtaparkKatModel kat = data.katlar![index];

@@ -23,11 +23,6 @@ class KullaniciParkController extends ChangeNotifier{
     notifyListeners();
   }
 
-  void aktifIndexiDegistir(int index) {
-    aktifKatIndex = index;
-    notifyListeners();
-  }
-
 
   void otoparkAlaniSec({required OtoparkModel model, required int katIndex, required int parkIndex,required String plaka}) {
     _fireStoreServices.otaparkAlaniSec(

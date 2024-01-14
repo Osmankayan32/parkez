@@ -19,6 +19,7 @@ class ParkScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text("Park Ekranı")),
+
         body: Consumer(builder: (context, ref, child) {
           final controller = ref.read(parkScreenController);
           return StreamBuilder<QuerySnapshot>(

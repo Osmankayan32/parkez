@@ -22,13 +22,14 @@ class _OtaparkScreenState extends State<OtaparkScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Themes.primaryColor,
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) =>  StepWidget()),
             );
           },
-          child: Text("Otopark Ekle"),
+          child: const Icon(Icons.add),
         ),
         appBar: AppBar(
           title: const Text("Otaparklarım"),
