@@ -75,7 +75,7 @@ class ParkYeriModel {
   String? parkYeriIsmi;
   bool? aracVarMi;
 
-  ParkYeriModel({required this.parkYeriIsmi, required this.aracVarMi});
+  ParkYeriModel({ this.parkYeriIsmi,  this.aracVarMi});
 
   ParkYeriModel.formJson(Map<String, dynamic> json){
     parkYeriIsmi = json['parkYeriIsmi'];
