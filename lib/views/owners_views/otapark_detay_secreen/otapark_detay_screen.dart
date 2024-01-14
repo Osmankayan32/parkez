@@ -134,11 +134,19 @@ class OtoparkDetayScreen extends StatelessWidget {
             margin: const EdgeInsets.all(10),
             //color: parkYeri.aracVarMi! ? Colors.green : Colors.red,
             child: SvgPicture.asset(
-              color: Colors.black38, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
-
-              parkYeri.aracVarMi! ? "assets/icons/select_car.svg" : "assets/icons/un_select_car.svg",
+              color: parkYeri.aracVarMi! ?Themes.primaryColor:Colors.black38, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
+               "assets/icons/select_car.svg" ,
               fit: BoxFit.contain,
             ),
+          ),
+        ),
+
+        Text(
+          parkYeri.aracPlaka??"-",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Themes.primaryColor,
           ),
         ),
       ],
