@@ -5,7 +5,7 @@ class CustomButon extends StatelessWidget {
   final double? width;
   final Widget child;
   final Color? color;
-  final Function() onTap;
+  final Function()? onTap;
 
   const CustomButon({
     Key? key,
@@ -25,7 +25,7 @@ class CustomButon extends StatelessWidget {
         width: width ?? double.minPositive,
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: onTap==null?Colors.grey:Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(

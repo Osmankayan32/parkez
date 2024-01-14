@@ -38,6 +38,18 @@ class OwnerController extends ChangeNotifier {
     final isim = otaparkIsmiController.text;
     User? user = _authService.getUser();
     final uid = user!.uid;
+    List<OtaparkKatModel> _katlar = [];
+    for(OtaparkKatModel kat in katlar){
+      kat.parkYerleri = [];
+      for(int i =0 ; i<kat.katKapasitesi!; i++){
+        kat.parkYerleri!.add(ParkYeriModel(
+          parkYeriIsmi: "${i+1}",
+          aracVarMi: false,
+        ));
+      }
+      _katlar.add(kat);
+    }
+
     final model = OtoparkModel(
       uid: uid,
       katSayisi: katSayisi,
@@ -45,7 +57,7 @@ class OwnerController extends ChangeNotifier {
       otoparkIsmi: isim,
       //otoparkKapasitesi: kapasite,
       saatlikUcret: saatlikUcret,
-      katlar: katlar,
+      katlar: _katlar,
     );
 
     otaparkiDbKaydet(model);

@@ -11,7 +11,9 @@ import '../kullanici_park_detay/kullanici_park_detay.dart';
 import 'controller/park_screen_controller.dart';
 
 class ParkScreen extends StatelessWidget {
-  const ParkScreen({Key? key}) : super(key: key);
+  final String plaka;
+
+  const ParkScreen({Key? key, required this.plaka}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,9 @@ class ParkScreen extends StatelessWidget {
                 }
                 final response = snapshot.data!.docs;
                 List<OtoparkModel> data = snapshot.data!.docs.map((e) {
-                  e.id;
-                  return OtoparkModel.fromJson(e.data() as Map<String, dynamic>);
+                  final model = OtoparkModel.fromJson(e.data() as Map<String, dynamic>);
+                  model.firebaseId = e.id;
+                  return model;
                 }).toList();
 
                 return ListView.builder(
@@ -48,7 +51,7 @@ class ParkScreen extends StatelessWidget {
                           color: Themes.primaryColor,
                         ),
                       ),
-                      onTap: () => controller.otparkDetayaGit(context, data[index]),
+                      onTap: () => controller.otparkDetayaGit(context, data[index], plaka),
                     );
                   },
                   itemCount: data.length,

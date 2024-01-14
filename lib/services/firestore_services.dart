@@ -91,6 +91,13 @@ class FireStoreServices {
     final otopark = _firestore.collection(_CollectionPath.otopark).doc(id);
     return otopark.snapshots();
   }
+
+  void otaparkAlaniSec({required OtoparkModel model, required int katIndex, required int parkAlaniIndex,required String plaka}) {
+    final otopark = _firestore.collection(_CollectionPath.otopark).doc(model.firebaseId);
+     model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracPlaka = plaka;
+    model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracVarMi = true;
+    otopark.update(model.toMap());
+  }
 /*
   void userAdd({required UserModel model}) async {
     final user = _firestore.collection(_CollectionPath.users);

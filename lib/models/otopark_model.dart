@@ -48,7 +48,7 @@ class OtoparkModel {
 class OtaparkKatModel {
   String? katIsmi;
   int? katKapasitesi;
-  List<ParkYeriModel>? parkYerleri;
+  List<ParkYeriModel>? parkYerleri=[];
 
   OtaparkKatModel({ this.katIsmi,  this.katKapasitesi,  this.parkYerleri});
 
@@ -73,19 +73,22 @@ class OtaparkKatModel {
 
 class ParkYeriModel {
   String? parkYeriIsmi;
+  String? aracPlaka;
   bool? aracVarMi;
 
-  ParkYeriModel({ this.parkYeriIsmi,  this.aracVarMi});
+  ParkYeriModel({ this.parkYeriIsmi,  this.aracVarMi,this.aracPlaka});
 
   ParkYeriModel.formJson(Map<String, dynamic> json){
     parkYeriIsmi = json['parkYeriIsmi'];
     aracVarMi = json['aracVarMi'];
+    aracPlaka = json['aracPlaka'];
   }
 
   Map<String, dynamic> toMap() {
     return {
       'parkYeriIsmi': parkYeriIsmi,
       'aracVarMi': aracVarMi,
+      'aracPlaka': aracPlaka,
     };
   }
 

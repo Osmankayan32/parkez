@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:login_screen/models/otopark_model.dart';
 import 'package:login_screen/services/firestore_services.dart';
 
 import '../../../services/locator.dart';
@@ -25,5 +26,15 @@ class KullaniciParkController extends ChangeNotifier{
   void aktifIndexiDegistir(int index) {
     aktifKatIndex = index;
     notifyListeners();
+  }
+
+
+  void otoparkAlaniSec({required OtoparkModel model, required int katIndex, required int parkIndex,required String plaka}) {
+    _fireStoreServices.otaparkAlaniSec(
+      plaka: plaka,
+      model: model,
+      katIndex: katIndex,
+      parkAlaniIndex: parkIndex,
+    );
   }
 }

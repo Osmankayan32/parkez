@@ -43,11 +43,15 @@ class HomeScreen extends StatelessWidget {
               Consumer(builder: (context, ref, child) {
                 VehicleModel? vehicle = ref.watch(vehicleController.select((value) => value.seciliArac));
 
-                return vehicle == null ? const SizedBox.shrink() : Text(
-                  "${vehicle.aracName} - ${vehicle.plaka}" ?? "plaka null geldi", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.start,);
+                return vehicle == null
+                    ? const SizedBox.shrink()
+                    : Text(
+                        "${vehicle.aracName} - ${vehicle.plaka}" ?? "plaka null geldi",
+                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
+                      );
               }),
               Image.asset("assets/images/City driver-pana.png"),
-
               Consumer(builder: (context, ref, child) {
                 final controller = ref.read(vehicleController);
                 return CustomButon(
@@ -56,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) => const VehicleSecreen()),
                     );
-                    if(response == null) return;
+                    if (response == null) return;
                     final vehicleModel = VehicleModel.fromJson(response);
                     controller.selectVehicle(vehicleModel);
                   },
@@ -64,13 +68,21 @@ class HomeScreen extends StatelessWidget {
                   child: const Text("Araç Seç", style: TextStyle(fontSize: 18, color: Colors.white)),
                 );
               }),
-              CustomButon(onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ParkScreen()),
-                );
+              Consumer(builder: (context, ref, child) {
+                VehicleModel? vehicle = ref.watch(vehicleController.select((value) => value.seciliArac));
+                return CustomButon(
+                  onTap: vehicle==null?null:() {
 
-              }, child:  Text("Otaparklar", style: TextStyle(fontSize: 18, color: Colors.white)), width: 200,),
+                    String plaka = vehicle.plaka!;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ParkScreen(plaka: plaka)),
+                    );
+                  },
+                  child: Text("Otaparklar", style: TextStyle(fontSize: 18, color: Colors.white)),
+                  width: 200,
+                );
+              }),
               CustomButon(
                 onTap: () async {
                   Navigator.push(
