@@ -21,7 +21,7 @@ class OtoparkController extends ChangeNotifier {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> otaparkGetir() {
-    return _fireStoreServices.otaparkGetir();
+    return _fireStoreServices.kullaniciyaAitOtaparkGetir();
   }
 
   void otaparkDetaySayfasinaGit(BuildContext context, OtoparkModel model) {

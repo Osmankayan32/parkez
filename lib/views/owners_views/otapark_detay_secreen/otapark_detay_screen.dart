@@ -6,6 +6,7 @@ import 'package:login_screen/models/otopark_model.dart';
 import 'package:login_screen/views/owners_views/otapark_detay_secreen/controller/otopark_detay_controller.dart';
 
 import '../../../themes/light_theme.dart';
+import '../../profile_screen/profile_screen.dart';
 import '../otaparklar_screen/controller/otapark_controller.dart';
 
 class OtoparkDetayScreen extends StatelessWidget {

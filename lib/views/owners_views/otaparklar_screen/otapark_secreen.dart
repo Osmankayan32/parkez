@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login_screen/widgets/wating_widgets.dart';
 import '../../../models/otopark_model.dart';
 import '../../../themes/light_theme.dart';
+import '../../profile_screen/profile_screen.dart';
 import 'controller/otapark_controller.dart';
 
 class OtaparkScreen extends StatefulWidget {
-
   const OtaparkScreen({Key? key}) : super(key: key);
 
   @override
@@ -22,6 +22,18 @@ class _OtaparkScreenState extends State<OtaparkScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Otaparklarım"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.account_circle),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen(otaparSayfasindanMi: true)),
+                );
+                // Ayarlar butonuna basıldığında yapılacak işlemler
+              },
+            ),
+          ],
         ),
         body: Consumer(builder: (context, ref, child) {
           final controller = ref.read(otoparkController);
@@ -46,17 +58,15 @@ class _OtaparkScreenState extends State<OtaparkScreen> {
                     itemCount: data.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                          onTap: ()=> controller.otaparkDetaySayfasinaGit(context, data[index]),
-
-                      title: Text(data[index].otoparkIsmi!,style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Themes.primaryColor
-                      ,
-                      )
-                      ,
-                      )
-                      ,
+                        onTap: () => controller.otaparkDetaySayfasinaGit(context, data[index]),
+                        title: Text(
+                          data[index].otoparkIsmi!,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Themes.primaryColor,
+                          ),
+                        ),
                       );
                     });
               });

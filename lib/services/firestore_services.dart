@@ -68,7 +68,7 @@ class FireStoreServices {
     otopark.add(model.toMap());
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> otaparkGetir() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> kullaniciyaAitOtaparkGetir() {
     final otopark = _firestore.collection(_CollectionPath.otopark).where("uid", isEqualTo: _auth.currentUser!.uid);
 
     return otopark.snapshots();
@@ -81,6 +81,16 @@ class FireStoreServices {
     return otoparkData;
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> tumOtoparklariGetir() {
+    final otopark = _firestore.collection(_CollectionPath.otopark);
+
+    return otopark.snapshots();
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> idGoreOtaparkGetir(String id) {
+    final otopark = _firestore.collection(_CollectionPath.otopark).doc(id);
+    return otopark.snapshots();
+  }
 /*
   void userAdd({required UserModel model}) async {
     final user = _firestore.collection(_CollectionPath.users);
