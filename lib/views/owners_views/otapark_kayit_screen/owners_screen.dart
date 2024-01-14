@@ -7,8 +7,8 @@ import 'package:login_screen/widgets/wating_widgets.dart';
 import 'controller/owners_controller.dart';
 import 'widgets/step_widget.dart';
 
-class OwnersScreen extends StatelessWidget {
-  const OwnersScreen({super.key});
+class OtoparkKaydet extends StatelessWidget {
+  const OtoparkKaydet({super.key});
 
   @override
   Widget build(BuildContext context) {

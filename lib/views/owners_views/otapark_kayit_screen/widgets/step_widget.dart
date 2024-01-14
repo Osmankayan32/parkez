@@ -16,7 +16,6 @@ class StepWidget extends StatefulWidget {
 class _StepWidgetState extends State<StepWidget> {
   int _index = 0;
   int maxIndex = 5;
-  List<OtaparkKatModel> katlar = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,6 @@ class _StepWidgetState extends State<StepWidget> {
               width: double.infinity,
               child: CustomButon(
                 onTap: () {
-                  controller.katlar = katlar;
                   controller.otaparkiKaydet(context);
                 },
                 width: 100,
@@ -132,32 +130,7 @@ class _StepWidgetState extends State<StepWidget> {
                   shrinkWrap: true,
                   itemCount: katSayisi,
                   itemBuilder: (context, index) {
-                    final isimController = TextEditingController();
-                    final kapasiteController = TextEditingController();
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomTextField(hintText: "Kat İsmi", controller: isimController),
-                        CustomTextField(hintText: "Araç Kapasitesi", controller: kapasiteController),
-                        CustomButon(
-                          onTap: () {
-                            final isim = isimController.text;
-                            final kapasite = int.parse(kapasiteController.text);
-                            final katModel = OtaparkKatModel(
-                              katIsmi: isim,
-                              katKapasitesi: kapasite,
-                            );
-                            katlar.add(katModel);
-                          },
-                          child: Text(
-                            "Kaydet",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          width: 100,
-                          height: 40,
-                        )
-                      ],
-                    );
+                    return _KatKayitWidget();
                   },
                   separatorBuilder: (context, index) {
                     return const Divider(color: Colors.black);
@@ -180,10 +153,57 @@ class _StepWidgetState extends State<StepWidget> {
     });
   }
 
-
   void stepTapped(int index) {
     setState(() {
       _index = index;
+    });
+  }
+}
+
+class _KatKayitWidget extends StatefulWidget {
+  @override
+  State<_KatKayitWidget> createState() => _KatKayitWidgetState();
+}
+
+class _KatKayitWidgetState extends State<_KatKayitWidget> {
+  bool kayitEdildiMi = false;
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    if(kayitEdildiMi){
+      return const Icon(Icons.check_circle, color: Colors.green, size: 50,);
+    }
+    final isimController = TextEditingController();
+    final kapasiteController = TextEditingController();
+    return Consumer(builder: (context, ref, child) {
+      final controller = ref.read(ownerController);
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextField(hintText: "Kat İsmi", controller: isimController),
+          CustomTextField(hintText: "Araç Kapasitesi", controller: kapasiteController),
+          CustomButon(
+            onTap: () {
+              final isim = isimController.text;
+              final kapasite = int.parse(kapasiteController.text);
+              final katModel = OtaparkKatModel(
+                katIsmi: isim,
+                katKapasitesi: kapasite,
+              );
+              controller.katlar.add(katModel);
+              setState(() {
+                kayitEdildiMi = true;
+              });
+            },
+            width: 100,
+            height: 40,
+            child: const  Text(
+              "Kaydet",
+              style: TextStyle(color: Colors.white),
+            ),
+          )
+        ],
+      );
     });
   }
 }

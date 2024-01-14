@@ -25,7 +25,7 @@ class ProfileController extends ChangeNotifier {
 
   void ownersSayfasinaGit(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const OwnersScreen()),
+        MaterialPageRoute(builder: (context) => const OtoparkKaydet()),
         (Route<dynamic> route) => false);
   }
   void kullaniciOlarakDevamEt(BuildContext context) {

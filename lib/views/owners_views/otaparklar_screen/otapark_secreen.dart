@@ -7,6 +7,7 @@ import 'package:login_screen/widgets/wating_widgets.dart';
 import '../../../models/otopark_model.dart';
 import '../../../themes/light_theme.dart';
 import '../../profile_screen/profile_screen.dart';
+import '../otapark_kayit_screen/widgets/step_widget.dart';
 import 'controller/otapark_controller.dart';
 
 class OtaparkScreen extends StatefulWidget {
@@ -20,8 +21,18 @@ class _OtaparkScreenState extends State<OtaparkScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>  StepWidget()),
+            );
+          },
+          child: Text("Otopark Ekle"),
+        ),
         appBar: AppBar(
           title: const Text("Otaparklarım"),
+
           actions: [
             IconButton(
               icon: const Icon(Icons.account_circle),
