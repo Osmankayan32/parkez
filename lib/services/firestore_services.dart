@@ -74,6 +74,13 @@ class FireStoreServices {
     return otopark.snapshots();
   }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> futureGetOtopark() async {
+    final otopark = _firestore.collection(_CollectionPath.otopark).where("uid", isEqualTo: _auth.currentUser!.uid);
+    final otoparkData = await otopark.get();
+
+    return otoparkData;
+  }
+
 /*
   void userAdd({required UserModel model}) async {
     final user = _firestore.collection(_CollectionPath.users);

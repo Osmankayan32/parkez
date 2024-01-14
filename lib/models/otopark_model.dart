@@ -1,5 +1,6 @@
 class OtoparkModel {
   String? uid;
+  String? firebaseId;
   String? otoparkIsmi;
   String? otoparkAdresi;
   int? otoparkKapasitesi;
@@ -8,6 +9,7 @@ class OtoparkModel {
   List<OtaparkKatModel>? katlar;
 
   OtoparkModel({
+    this.firebaseId,
     this.uid,
     this.otoparkIsmi,
     this.otoparkAdresi,
