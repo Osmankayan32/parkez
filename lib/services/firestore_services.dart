@@ -2,12 +2,14 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:login_screen/models/otopark_model.dart';
 import 'package:login_screen/models/user_model.dart';
 import 'package:login_screen/models/vehicle_model.dart';
 
 class _CollectionPath {
   static const String users = 'users';
   static const String vehicles = 'vehicle';
+  static const String otopark = 'otopark';
 }
 
 class FireStoreServices {
@@ -16,7 +18,7 @@ class FireStoreServices {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getVehicles() {
     User? user = _auth.currentUser;
-    if(user == null){
+    if (user == null) {
       return Stream.empty();
     }
     final vehiceles = _firestore
@@ -60,6 +62,18 @@ class FireStoreServices {
     });
     return userList;
   }
+
+  void otaparkEkle(OtoparkModel model) {
+    final otopark = _firestore.collection(_CollectionPath.otopark);
+    otopark.add(model.toMap());
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> otaparkGetir() {
+    final otopark = _firestore.collection(_CollectionPath.otopark).where("uid", isEqualTo: _auth.currentUser!.uid);
+
+    return otopark.snapshots();
+  }
+
 /*
   void userAdd({required UserModel model}) async {
     final user = _firestore.collection(_CollectionPath.users);

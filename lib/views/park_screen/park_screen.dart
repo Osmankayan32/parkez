@@ -14,7 +14,6 @@ class ParkScreen extends StatelessWidget {
           SizedBox(
             height: 400,
             child: _GoogleMap(),
-
           )
         ],
       ),
@@ -30,7 +29,7 @@ class _GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<_GoogleMap> {
-  late GoogleMapController mapController ;
+  late GoogleMapController mapController;
 
   Set<Marker> markers = Set();
 
@@ -41,13 +40,13 @@ class _GoogleMapState extends State<_GoogleMap> {
         setState(() {
           mapController = controller;
           // Örnek olarak iki farklı nokta ekleyelim
-          addMarker(LatLng(37.7749, -122.4194), 'Nokta 1');
-          addMarker(LatLng(37.773972, -122.431297), 'Nokta 2');
+          addMarker(const LatLng(37.7749, -122.4194), 'Nokta 1');
+          addMarker(const LatLng(37.773972, -122.431297), 'Nokta 2');
         });
       },
-      initialCameraPosition: CameraPosition(
-        target: LatLng(37.7749, -122.4194), // Başlangıç konumu
-        zoom: 12.0,
+      initialCameraPosition: const CameraPosition(
+        target: LatLng(37.763498865465145, 30.556742312922573), // Başlangıç konumu
+        zoom: 100.0,
       ),
       markers: markers,
     );
