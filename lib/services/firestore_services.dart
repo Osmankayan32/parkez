@@ -40,8 +40,10 @@ class FireStoreServices {
     });
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getVehicle() async {
-    final vehicle = _firestore.collection("vehicle").doc("2");
+  Future<QuerySnapshot<Map<String, dynamic>>> getVehicle() async {
+    User user = _auth.currentUser!;
+
+    final vehicle = _firestore.collection("vehicle").where("uid", isEqualTo: user.uid);
     final vehicleData = await vehicle.get();
     return vehicleData;
   }
@@ -97,6 +99,11 @@ class FireStoreServices {
      model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracPlaka = plaka;
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracVarMi = true;
     otopark.update(model.toMap());
+  }
+
+  void vehicleUpdate(VehicleModel vehicleModel){
+    final vehicle = _firestore.collection(_CollectionPath.vehicles).doc(vehicleModel.id);
+    vehicle.update(vehicleModel.toJson());
   }
 /*
   void userAdd({required UserModel model}) async {

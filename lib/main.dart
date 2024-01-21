@@ -6,7 +6,7 @@ import 'package:login_screen/views/login_screen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'views/login_screen/yeni_giriş_ekranı.dart';
-
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -29,6 +29,7 @@ class _MyAppState extends State<MyApp> {
         title: 'Firebase Auth',
         debugShowCheckedModeBanner: false,
         theme: Themes.lightTheme,
+        scaffoldMessengerKey: scaffoldMessengerKey,
         home: const LoginScreen(),
       ),
     );

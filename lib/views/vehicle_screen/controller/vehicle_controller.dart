@@ -29,9 +29,6 @@ class VehicleController extends ChangeNotifier {
     return _fireStoreServices.getVehicles();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getData() {
-    return _fireStoreServices.getVehicle();
-  }
   void aktifIndexiAta(int index){
     vehicleType = index;
     notifyListeners();

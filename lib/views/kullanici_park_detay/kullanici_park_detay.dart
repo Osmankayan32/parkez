@@ -9,12 +9,13 @@ import 'package:login_screen/views/owners_views/otapark_detay_secreen/controller
 import '../../../themes/light_theme.dart';
 import '../../widgets/wating_widgets.dart';
 import 'controller/kullanici_park_controller.dart';
+import 'widgets/park_onaylama_widget.dart';
 
 class KullaniciParkDetayScreen extends StatelessWidget {
   final String plaka;
   final OtoparkModel otoparkModel;
 
-  const KullaniciParkDetayScreen({super.key, required this.otoparkModel,required this.plaka});
+  const KullaniciParkDetayScreen({super.key, required this.otoparkModel, required this.plaka});
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +85,7 @@ class KullaniciParkDetayScreen extends StatelessWidget {
                                                       parkIndex: firstIndex,
                                                       plaka: plaka,
                                                       controller: controller)),
-                                              Container(
-                                                height: 50,
-                                                width: 1,
-                                                color: Colors.black,
-                                              ),
+                                              Container(height: 50, width: 1, color: Colors.black),
                                               Expanded(
                                                   child: parkYeriWidger(parkYeri2,
                                                       otoparkModel: otoparkModel,
@@ -154,41 +151,53 @@ class KullaniciParkDetayScreen extends StatelessWidget {
     required KullaniciParkController controller,
     required int katIndex,
     required int parkIndex,
-     required String plaka,
+    required String plaka,
   }) {
-    return InkWell(
-      onTap: () {
-        if (parkYeri.aracVarMi!) {
-          return;
-        }
-        controller.otoparkAlaniSec(model: otoparkModel, katIndex: katIndex, parkIndex: parkIndex,plaka: plaka);
-      },
-      child: Column(
-        children: [
-          Text(
-            parkYeri.parkYeriIsmi!,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Themes.primaryColor,
-            ),
-          ),
-          Transform.rotate(
-            angle: tersCevir ? 180 * 3.14 / 180 : 0,
-            child: Container(
-              height: 50,
-              width: 200,
-              margin: const EdgeInsets.all(10),
-              //color: parkYeri.aracVarMi! ? Colors.green : Colors.red,
-              child: SvgPicture.asset(
-                parkYeri.aracVarMi! ? "assets/icons/select_car.svg" : "assets/icons/un_select_car.svg",
-                color: parkYeri.aracVarMi! ? Themes.primaryColor : Colors.black38, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
-                fit: BoxFit.contain,
+    return Builder(builder: (context) {
+      return InkWell(
+        onTap: () {
+          if (parkYeri.aracVarMi!) {
+            return;
+          }
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ParkOnaylama(
+                        otoparkModel: otoparkModel,
+                        katIndex: katIndex,
+                        parkIndex: parkIndex,
+                        plaka: plaka,
+                      )));
+
+          //controller.otoparkAlaniSec(model: otoparkModel, katIndex: katIndex, parkIndex: parkIndex, plaka: plaka);
+        },
+        child: Column(
+          children: [
+            Text(
+              parkYeri.parkYeriIsmi!,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Themes.primaryColor,
               ),
             ),
-          ),
-        ],
-      ),
-    );
+            Transform.rotate(
+              angle: tersCevir ? 180 * 3.14 / 180 : 0,
+              child: Container(
+                height: 50,
+                width: 200,
+                margin: const EdgeInsets.all(10),
+                //color: parkYeri.aracVarMi! ? Colors.green : Colors.red,
+                child: SvgPicture.asset(
+                  parkYeri.aracVarMi! ? "assets/icons/select_car.svg" : "assets/icons/un_select_car.svg",
+                  color: parkYeri.aracVarMi! ? Themes.primaryColor : Colors.black38, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
