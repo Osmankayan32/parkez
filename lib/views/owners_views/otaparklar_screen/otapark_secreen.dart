@@ -26,14 +26,17 @@ class _OtaparkScreenState extends State<OtaparkScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) =>  StepWidget()),
+              MaterialPageRoute(
+                  builder: (context) => Scaffold(
+                        appBar: AppBar(title: const Text("Otapark Ekle")),
+                        body: StepWidget(),
+                      )),
             );
           },
           child: const Icon(Icons.add),
         ),
         appBar: AppBar(
           title: const Text("Otaparklarım"),
-
           actions: [
             IconButton(
               icon: const Icon(Icons.account_circle),
