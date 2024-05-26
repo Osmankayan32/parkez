@@ -27,4 +27,9 @@ class ParkScreenController extends ChangeNotifier {
       builder: (context) => KullaniciParkDetayScreen(otoparkModel: model, plaka: plaka),
     ));
   }
+  void haritadanDon(BuildContext context, OtoparkModel model, String plaka) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => KullaniciParkDetayScreen(otoparkModel: model, plaka: plaka),
+    ));
+  }
 }

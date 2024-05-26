@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -66,6 +68,11 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
           ),
         );
       },
+      onTap: (LatLng position) {
+        log("tapped position = $position");
+        //addMarker(position, "markerId");
+      },
+
       markers: widget.markers,
       trafficEnabled: true,
       myLocationEnabled: true,

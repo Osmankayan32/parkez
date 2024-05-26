@@ -31,34 +31,66 @@ class _ParkScreenState extends State<ParkScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            if (otoparklar.isEmpty) {
-              CustomBottomshett.show(
-                context: context,
-                child: const Center(child: Text("Bir sorun oluştu. Otopark bulunamadı")),
-              );
-              return;
-            }
+        floatingActionButton: Consumer(builder: (context, ref, child) {
+          final controller = ref.read(parkScreenController);
+          return FloatingActionButton(
+            onPressed: () {
+              if (otoparklar.isEmpty) {
+                CustomBottomshett.show(
+                  context: context,
+                  child: const Center(child: Text("Bir sorun oluştu. Otopark bulunamadı")),
+                );
+                return;
+              }
 
-            Set<Marker> markers = otoparklar.map((e) {
-              String? konum = e.otoparkAdresi;
-              double? lat = double.parse(konum!.split(",")[0]);
-              double? long = double.parse(konum.split(",")[1]);
+              Set<Marker> markers = otoparklar.map((e) {
+                String? konum = e.otoparkAdresi;
+                double? lat = double.parse(konum!.split(",")[0]);
+                double? long = double.parse(konum.split(",")[1]);
 
-              return Marker(
+                return Marker(
+                    markerId: MarkerId(e.firebaseId!),
+                    position: LatLng(lat, long),
+                    infoWindow: InfoWindow(title: e.otoparkIsmi!),
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text("Otopark Bilgileri"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Otopark Adı: ${e.otoparkIsmi}"),
+                                    Text("Otopark Saatlik Ücreti: ${e.saatlikUcret}"),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      controller.haritadanDon(context, e, widget.plaka);
+                                    },
+                                    child: const Text("Seç"),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Kapat"))
+                                ],
+                              ));
+                      // controller.otparkDetayaGit(context, e, widget.plaka);
+                    });
+              }).toSet();
 
-                markerId: MarkerId(e.firebaseId!),
-                position: LatLng(lat, long),
-                infoWindow: InfoWindow(title: e.otoparkIsmi!),
-              );
-            }).toSet();
-
-            log("markers uzunluk = ${markers.length}");
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen(markers: markers)));
-          },
-          child: const Icon(Icons.location_on),
-        ),
+              log("markers uzunluk = ${markers.length}");
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen(markers: markers)));
+            },
+            child: const Icon(Icons.location_on),
+          );
+        }),
         appBar: AppBar(title: const Text("Park Ekranı")),
         body: Consumer(builder: (context, ref, child) {
           final controller = ref.read(parkScreenController);

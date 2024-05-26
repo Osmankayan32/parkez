@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:login_screen/views/kullanici_park_detay/controller/kullanici_park_controller.dart';
@@ -95,51 +97,56 @@ class _ParkOnaylamaState extends State<ParkOnaylama> {
                 Row(
                   children: [
                     Text("Başlangıç Zamanı :", style: _style),
-                    TextButton(
-                        onPressed: () {
-                          DateTime date = DateTime.now();
-                          ExCupertinoDatePicker.showPicker(context, mode: CupertinoDatePickerMode.time, minimumDate: DateTime.now(),
-                              onDateTimeChanged: (dateTime) {
-                            date = dateTime;
-                          }, selectFunction: () {
-                            setState(() {
-                              baslangicZamani = date;
+                    Expanded(
+                      child: TextButton(
+                          onPressed: () {
+                            DateTime date = DateTime.now();
+                            ExCupertinoDatePicker.showPicker(context, mode: CupertinoDatePickerMode.time, minimumDate: DateTime.now(),
+                                onDateTimeChanged: (dateTime) {
+                              date = dateTime;
+                            }, selectFunction: () {
+                              setState(() {
+                                baslangicZamani = date;
+                              });
+                              Navigator.pop(context);
+                              log("tarih seçildi : $date");
                             });
-                            Navigator.pop(context);
-                            log("tarih seçildi : $date");
-                          });
-                        },
-                        child: baslangicZamani == null
-                            ? const Text("Seç")
-                            : Text(
-                                formatDate(baslangicZamani!),
-                                style: _style2,
-                              )),
+                          },
+                          child: baslangicZamani == null
+                              ? const Text("Seç")
+                              : AutoSizeText(
+                                  maxLines: 1,
+                                  formatDate(baslangicZamani!),
+                                  style: _style2,
+                                )),
+                    ),
                   ],
                 ),
                 Row(
                   children: [
                     Text("Bitiş Zamanı :", style: _style),
-                    TextButton(
-                        onPressed: () {
-                          DateTime date = DateTime.now();
-                          ExCupertinoDatePicker.showPicker(context, minimumDate: DateTime.now(), onDateTimeChanged: (dateTime) {
-                            date = dateTime;
-                          }, selectFunction: () {
-                            setState(() {
-                              bitisZamani = date;
+                    Expanded(
+                      child: TextButton(
+                          onPressed: () {
+                            DateTime date = DateTime.now();
+                            ExCupertinoDatePicker.showPicker(context, minimumDate: DateTime.now(), onDateTimeChanged: (dateTime) {
+                              date = dateTime;
+                            }, selectFunction: () {
+                              setState(() {
+                                bitisZamani = date;
+                              });
+                              Navigator.pop(context);
+                              log("tarih seçildi : $date");
+                              ucretHesapla();
                             });
-                            Navigator.pop(context);
-                            log("tarih seçildi : $date");
-                            ucretHesapla();
-                          });
-                        },
-                        child: bitisZamani == null
-                            ? const Text("Seç")
-                            : Text(
-                                formatDate(bitisZamani!),
-                                style: _style2,
-                              )),
+                          },
+                          child: bitisZamani == null
+                              ? const Text("Seç")
+                              : AutoSizeText(
+                                  formatDate(bitisZamani!),
+                                  style: _style2,
+                                )),
+                    ),
                   ],
                 ),
                 Row(
