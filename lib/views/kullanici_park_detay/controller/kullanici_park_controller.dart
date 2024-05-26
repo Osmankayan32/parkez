@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login_screen/models/otopark_model.dart';
 import 'package:login_screen/services/firestore_services.dart';
+import 'package:login_screen/widgets/custom_snacbar_widget.dart';
 
 import '../../../models/vehicle_model.dart';
 import '../../../services/locator.dart';
@@ -25,14 +27,8 @@ class KullaniciParkController extends ChangeNotifier{
   }
 
 
-  Future<void> otoparkAlaniSec({required OtoparkModel model, required int katIndex, required int parkIndex,required String plaka}) async {
+  Future<void> otoparkAlaniSec({required OtoparkModel model, required int katIndex, required int parkIndex,required String plaka,required String baslangic,required String bitis}) async {
 
-    _fireStoreServices.otaparkAlaniSec(
-      plaka: plaka,
-      model: model,
-      katIndex: katIndex,
-      parkAlaniIndex: parkIndex,
-    );
 
     final data =await _fireStoreServices.getVehicle();
     List<VehicleModel> vehicleList = data.docs.map((e) {
@@ -41,9 +37,23 @@ class KullaniciParkController extends ChangeNotifier{
       return VehicleModel.fromJson(e.data());
     }).toList();
     VehicleModel vehicleModel = vehicleList.firstWhere((element) => element.plaka == plaka);
-    vehicleModel.aracParktaMi = true;
 
-   // _vehicleUpdate(vehicleModel);
+    if(vehicleModel.aracParktaMi==true){
+      ExSnacBar.show("Araç zaten parkta", color: Colors.red);
+      return;
+    }
+    vehicleModel.aracParktaMi = true;
+    vehicleModel.aracParkBitisZamani = bitis;
+    vehicleModel.aracParkBaslangicZamani = baslangic;
+    _fireStoreServices.otaparkAlaniSec(
+      plaka: plaka,
+      model: model,
+      katIndex: katIndex,
+      parkAlaniIndex: parkIndex,
+      baslangicTarihi: baslangic,
+      bitisTarihi: bitis
+    );
+    _vehicleUpdate(vehicleModel);
 
 
   }

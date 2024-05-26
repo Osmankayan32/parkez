@@ -169,7 +169,11 @@ class _ParkOnaylamaState extends State<ParkOnaylama> {
                         katIndex: widget.katIndex,
                         parkIndex: widget.parkIndex,
                         plaka: widget.plaka,
+                        baslangic: baslangicZamani!.toIso8601String(),
+                        bitis: bitisZamani!.toIso8601String(),
                       );
+                      Navigator.pop(context);
+
                     },
                     height: 50,
                     width: 200,

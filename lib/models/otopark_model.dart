@@ -74,6 +74,8 @@ class OtaparkKatModel {
 class ParkYeriModel {
   String? parkYeriIsmi;
   String? aracPlaka;
+  String? baslangicTarihi;
+  String? bitisTarihi;
   bool? aracVarMi;
 
   ParkYeriModel({ this.parkYeriIsmi,  this.aracVarMi,this.aracPlaka});
@@ -82,6 +84,8 @@ class ParkYeriModel {
     parkYeriIsmi = json['parkYeriIsmi'];
     aracVarMi = json['aracVarMi'];
     aracPlaka = json['aracPlaka'];
+    baslangicTarihi = json['baslangicTarihi'];
+    bitisTarihi = json['bitisTarihi'];
   }
 
   Map<String, dynamic> toMap() {
@@ -89,6 +93,8 @@ class ParkYeriModel {
       'parkYeriIsmi': parkYeriIsmi,
       'aracVarMi': aracVarMi,
       'aracPlaka': aracPlaka,
+      'baslangicTarihi': baslangicTarihi,
+      'bitisTarihi': bitisTarihi,
     };
   }
 

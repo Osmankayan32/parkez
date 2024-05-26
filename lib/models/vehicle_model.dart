@@ -5,6 +5,8 @@ class VehicleModel {
   String? aracName;
   String? aracType;
   String? plaka;
+  String? aracParkBaslangicZamani;
+  String? aracParkBitisZamani;
   bool? aracParktaMi;
 
   VehicleModel({
@@ -13,6 +15,8 @@ class VehicleModel {
     this.aracName,
     this.aracType,
     this.plaka,
+    this.aracParktaMi,
+    this.aracParkBitisZamani,
   });
 
   VehicleModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +26,8 @@ class VehicleModel {
     aracType = json['arac_type'];
     plaka = json['plaka'];
     aracParktaMi = json['arac_parkta_mi'];
+    aracParkBitisZamani = json['arac_park_bitis_zamani'];
+    aracParkBaslangicZamani = json['arac_park_baslangic_zamani'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -31,5 +37,7 @@ class VehicleModel {
         'arac_type': aracType,
         'plaka': plaka,
         'arac_parkta_mi': aracParktaMi,
+        'arac_park_bitis_zamani': aracParkBitisZamani,
+        'arac_park_baslangic_zamani': aracParkBaslangicZamani,
       };
 }
