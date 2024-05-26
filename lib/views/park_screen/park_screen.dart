@@ -21,8 +21,10 @@ import 'controller/park_screen_controller.dart';
 class ListModel {
   OtoparkModel otoparkModel;
   String uzaklik;
+  int kapasite;
+  int doluluk;
 
-  ListModel({required this.otoparkModel, required this.uzaklik});
+  ListModel({required this.otoparkModel, required this.uzaklik, required this.kapasite, required this.doluluk});
 }
 
 class ParkScreen extends StatefulWidget {
@@ -36,6 +38,7 @@ class ParkScreen extends StatefulWidget {
 
 class _ParkScreenState extends State<ParkScreen> {
   List<OtoparkModel> otoparklar = [];
+
   /*
 
   Future<List<ListModel>> calculat({required List<OtoparkModel> otoparklar}) async {
@@ -76,7 +79,9 @@ class _ParkScreenState extends State<ParkScreen> {
 
   Future<String> calculateDrivingDistance(LatLng start, LatLng end) async {
     const String apiKey = 'AIzaSyAl5TtsfNcQL0iLuG_STqqYcW5zgEV19no';
-    final String url = 'https://maps.googleapis.com/maps/api/directions/json?origin=${start.latitude},${start.longitude}&destination=${end.latitude},${end.longitude}&key=$apiKey';
+    final String url =
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${start.latitude},${start.longitude}&destination=${end.latitude},${end
+        .longitude}&key=$apiKey';
 
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
@@ -113,7 +118,19 @@ class _ParkScreenState extends State<ParkScreen> {
       double? long = double.parse(konum.split(",")[1]);
       LatLng otoparkPosition = LatLng(lat, long);
       String uzaklik = await calculateDrivingDistance(currentPosition, otoparkPosition);
-      listModels.add(ListModel(otoparkModel: otopark, uzaklik: uzaklik));
+      int doluluk = 0;
+      int kapasite = 0;
+      for (OtaparkKatModel kat in otopark.katlar ?? []) {
+        doluluk += kat.parkYerleri!.where((element) => element.aracVarMi == true).length;
+        kapasite += kat.katKapasitesi??0;
+      }
+      listModels.add(ListModel(
+          otoparkModel: otopark,
+          uzaklik: uzaklik,
+          doluluk: doluluk,
+          kapasite: kapasite
+
+      ));
     }
 
     // Listeyi yakından uzağa sıralama
@@ -121,6 +138,7 @@ class _ParkScreenState extends State<ParkScreen> {
 
     return listModels;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,7 +166,8 @@ class _ParkScreenState extends State<ParkScreen> {
                     onTap: () {
                       showDialog(
                           context: context,
-                          builder: (context) => AlertDialog(
+                          builder: (context) =>
+                              AlertDialog(
                                 title: Text("Otopark Bilgileri"),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -229,6 +248,14 @@ class _ParkScreenState extends State<ParkScreen> {
                                 fontWeight: FontWeight.bold,
                                 color: Themes.primaryColor,
                               ),
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(data[index].kapasite.toString(), style: const TextStyle(fontSize: 12, color: Colors.black)),
+                                Text("/", style: const TextStyle(fontSize: 12, color: Colors.black)),
+                                Text(data[index].doluluk.toString(), style: const TextStyle(fontSize: 12, color: Colors.black)),
+                              ],
                             ),
                             subtitle: Text("Uzaklık: ${data[index].uzaklik}", style: const TextStyle(fontSize: 12, color: Colors.black)),
                             onTap: () => controller.otparkDetayaGit(context, data[index].otoparkModel, widget.plaka),
