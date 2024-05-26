@@ -45,6 +45,8 @@ class OwnerController extends ChangeNotifier {
         kat.parkYerleri!.add(ParkYeriModel(
           parkYeriIsmi: "${i+1}",
           aracVarMi: false,
+          baslangicTarihi: "",
+          bitisTarihi: "",
         ));
       }
       _katlar.add(kat);

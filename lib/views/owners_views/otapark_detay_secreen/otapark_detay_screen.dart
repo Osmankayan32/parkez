@@ -58,13 +58,13 @@ class OtoparkDetayScreen extends StatelessWidget {
 
                                 return Row(
                                   children: [
-                                    Expanded(child: parkYeriWidger(parkYeri1, tersCevir: true)),
+                                    Expanded(child: parkYeriWidger(parkYeri1, tersCevir: true,context: context)),
                                     Container(
                                       height: 50,
                                       width: 1,
                                       color: Colors.black,
                                     ),
-                                    Expanded(child: parkYeriWidger(parkYeri2)),
+                                    Expanded(child: parkYeriWidger(parkYeri2,context: context)),
                                   ],
                                 );
                               },
@@ -115,41 +115,60 @@ class OtoparkDetayScreen extends StatelessWidget {
     );
   }
 
-  Widget parkYeriWidger(ParkYeriModel parkYeri, {bool tersCevir = false}) {
-    return Column(
-      children: [
-        Text(
-          parkYeri.parkYeriIsmi!,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Themes.primaryColor,
+  Widget parkYeriWidger(ParkYeriModel parkYeri, {bool tersCevir = false,required BuildContext context,  }) {
+    return GestureDetector(
+      onTap: (){
+        showDialog(context: context, builder: (context) => AlertDialog(
+          title: Text(parkYeri.aracPlaka??"-"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Başlangıç Tarihi : ${parkYeri.baslangicTarihi}"),
+              Text("Bitiş Tarihi : ${parkYeri.bitisTarihi}"),
+            ],
           ),
-        ),
-        Transform.rotate(
-          angle: tersCevir ? 180 * 3.14 / 180 : 0,
-          child: Container(
-            height: 50,
-            width: 200,
-            margin: const EdgeInsets.all(10),
-            //color: parkYeri.aracVarMi! ? Colors.green : Colors.red,
-            child: SvgPicture.asset(
-              color: parkYeri.aracVarMi! ?Themes.primaryColor:Colors.black38, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
-               "assets/icons/select_car.svg" ,
-              fit: BoxFit.contain,
+        ));
+
+
+
+
+      },
+      child: Column(
+        children: [
+          Text(
+            parkYeri.parkYeriIsmi!,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Themes.primaryColor,
             ),
           ),
-        ),
-
-        Text(
-          parkYeri.aracPlaka??"-",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Themes.primaryColor,
+          Transform.rotate(
+            angle: tersCevir ? 180 * 3.14 / 180 : 0,
+            child: Container(
+              height: 50,
+              width: 200,
+              margin: const EdgeInsets.all(10),
+              //color: parkYeri.aracVarMi! ? Colors.green : Colors.red,
+              child: SvgPicture.asset(
+                color: parkYeri.aracVarMi! ?Themes.primaryColor:Colors.black38, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
+                 "assets/icons/select_car.svg" ,
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
-        ),
-      ],
+
+          Text(
+            parkYeri.aracPlaka??"-",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Themes.primaryColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

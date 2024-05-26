@@ -94,21 +94,21 @@ class FireStoreServices {
     return otopark.snapshots();
   }
 
-  void otaparkAlaniSec({
+  Future<void> otaparkAlaniSec({
     required OtoparkModel model,
     required int katIndex,
     required int parkAlaniIndex,
     required String plaka,
     required String baslangicTarihi,
     required String bitisTarihi,
-  }) {
-    final otopark = _firestore.collection(_CollectionPath.otopark).doc(model.firebaseId);
-    final parkyeriModel = model.katlar![katIndex].parkYerleri![parkAlaniIndex];
-    parkyeriModel.aracPlaka = plaka;
-    parkyeriModel.aracVarMi = true;
-    parkyeriModel.baslangicTarihi = baslangicTarihi;
-    parkyeriModel.bitisTarihi = bitisTarihi;
-    otopark.update(parkyeriModel.toMap());
+  }) async {
+    final otopark =  await  _firestore.collection(_CollectionPath.otopark).where("uid",isEqualTo: model.uid).get();
+    model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracPlaka = plaka;
+    model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracVarMi = true;
+    model.katlar![katIndex].parkYerleri![parkAlaniIndex].baslangicTarihi = baslangicTarihi;
+    model.katlar![katIndex].parkYerleri![parkAlaniIndex].bitisTarihi = bitisTarihi;
+    otopark.docs.first.reference.update(model.toMap());
+
   }
 
   Future<void> vehicleUpdate(VehicleModel vehicleModel) async {

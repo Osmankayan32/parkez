@@ -42,18 +42,20 @@ class KullaniciParkController extends ChangeNotifier{
       ExSnacBar.show("Araç zaten parkta", color: Colors.red);
       return;
     }
+
+
     vehicleModel.aracParktaMi = true;
     vehicleModel.aracParkBitisZamani = bitis;
     vehicleModel.aracParkBaslangicZamani = baslangic;
     _fireStoreServices.otaparkAlaniSec(
-      plaka: plaka,
-      model: model,
-      katIndex: katIndex,
-      parkAlaniIndex: parkIndex,
-      baslangicTarihi: baslangic,
-      bitisTarihi: bitis
+        plaka: plaka,
+        model: model,
+        katIndex: katIndex,
+        parkAlaniIndex: parkIndex,
+        baslangicTarihi: baslangic,
+        bitisTarihi: bitis
     );
-    _vehicleUpdate(vehicleModel);
+   _vehicleUpdate(vehicleModel);
 
 
   }

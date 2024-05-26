@@ -78,7 +78,7 @@ class ParkYeriModel {
   String? bitisTarihi;
   bool? aracVarMi;
 
-  ParkYeriModel({ this.parkYeriIsmi,  this.aracVarMi,this.aracPlaka});
+  ParkYeriModel({ this.parkYeriIsmi,  this.aracVarMi,this.aracPlaka, this.baslangicTarihi, this.bitisTarihi});
 
   ParkYeriModel.formJson(Map<String, dynamic> json){
     parkYeriIsmi = json['parkYeriIsmi'];
