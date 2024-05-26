@@ -1,25 +1,65 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:login_screen/models/otopark_model.dart';
 import 'package:login_screen/themes/light_theme.dart';
+import 'package:login_screen/views/map_screen/map_screen.dart';
+import 'package:login_screen/widgets/custom_bottomsheet.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../widgets/wating_widgets.dart';
 import '../kullanici_park_detay/kullanici_park_detay.dart';
 import 'controller/park_screen_controller.dart';
 
-class ParkScreen extends StatelessWidget {
+class ParkScreen extends StatefulWidget {
   final String plaka;
 
   const ParkScreen({Key? key, required this.plaka}) : super(key: key);
 
   @override
+  State<ParkScreen> createState() => _ParkScreenState();
+}
+
+class _ParkScreenState extends State<ParkScreen> {
+  List<OtoparkModel> otoparklar = [];
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Park Ekranı")),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            if (otoparklar.isEmpty) {
+              CustomBottomshett.show(
+                context: context,
+                child: const Center(child: Text("Bir sorun oluştu. Otopark bulunamadı")),
+              );
+              return;
+            }
 
+            Set<Marker> markers = otoparklar.map((e) {
+              String? konum = e.otoparkAdresi;
+              double? lat = double.parse(konum!.split(",")[0]);
+              double? long = double.parse(konum.split(",")[1]);
+
+              return Marker(
+
+                markerId: MarkerId(e.firebaseId!),
+                position: LatLng(lat, long),
+                infoWindow: InfoWindow(title: e.otoparkIsmi!),
+              );
+            }).toSet();
+
+            log("markers uzunluk = ${markers.length}");
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen(markers: markers)));
+          },
+          child: const Icon(Icons.location_on),
+        ),
+        appBar: AppBar(title: const Text("Park Ekranı")),
         body: Consumer(builder: (context, ref, child) {
           final controller = ref.read(parkScreenController);
           return StreamBuilder<QuerySnapshot>(
@@ -40,68 +80,24 @@ class ParkScreen extends StatelessWidget {
                   model.firebaseId = e.id;
                   return model;
                 }).toList();
-
+                otoparklar = data;
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(
                         data[index].otoparkIsmi!,
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 19,
                           fontWeight: FontWeight.bold,
                           color: Themes.primaryColor,
                         ),
                       ),
-                      onTap: () => controller.otparkDetayaGit(context, data[index], plaka),
+                      onTap: () => controller.otparkDetayaGit(context, data[index], widget.plaka),
                     );
                   },
                   itemCount: data.length,
                 );
               });
         }));
-  }
-}
-
-class _GoogleMap extends StatefulWidget {
-  const _GoogleMap({Key? key}) : super(key: key);
-
-  @override
-  State<_GoogleMap> createState() => _GoogleMapState();
-}
-
-class _GoogleMapState extends State<_GoogleMap> {
-  late GoogleMapController mapController;
-
-  Set<Marker> markers = Set();
-
-  @override
-  Widget build(BuildContext context) {
-    return GoogleMap(
-      onMapCreated: (controller) {
-        setState(() {
-          mapController = controller;
-          // Örnek olarak iki farklı nokta ekleyelim
-          addMarker(const LatLng(37.7749, -122.4194), 'Nokta 1');
-          addMarker(const LatLng(37.773972, -122.431297), 'Nokta 2');
-        });
-      },
-      initialCameraPosition: const CameraPosition(
-        target: LatLng(37.763498865465145, 30.556742312922573), // Başlangıç konumu
-        zoom: 100.0,
-      ),
-      markers: markers,
-    );
-  }
-
-  void addMarker(LatLng position, String markerId) {
-    Marker marker = Marker(
-      markerId: MarkerId(markerId),
-      position: position,
-      infoWindow: InfoWindow(title: markerId),
-    );
-
-    setState(() {
-      markers.add(marker);
-    });
   }
 }
