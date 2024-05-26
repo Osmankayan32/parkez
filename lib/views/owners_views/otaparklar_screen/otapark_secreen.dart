@@ -66,8 +66,9 @@ class _OtaparkScreenState extends State<OtaparkScreen> {
                 }
                 final response = snapshot.data!.docs;
                 List<OtoparkModel> data = snapshot.data!.docs.map((e) {
-                  e.id;
-                  return OtoparkModel.fromJson(e.data() as Map<String, dynamic>);
+                  final model = OtoparkModel.fromJson(e.data() as Map<String, dynamic>);
+                  model.firebaseId= e.id;
+                  return model;
                 }).toList();
                 return ListView.builder(
                     itemCount: data.length,

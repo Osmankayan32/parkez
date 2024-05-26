@@ -93,6 +93,12 @@ class FireStoreServices {
     final otopark = _firestore.collection(_CollectionPath.otopark).doc(id);
     return otopark.snapshots();
   }
+  Stream<QuerySnapshot<Map<String, dynamic>>> uidGoreOtaparkGetir(String uid) {
+    final otopark = _firestore.collection(_CollectionPath.otopark).where("uid",isEqualTo: uid).snapshots();
+    return otopark;
+  }
+
+
 
   Future<void> otaparkAlaniSec({
     required OtoparkModel model,
@@ -102,13 +108,26 @@ class FireStoreServices {
     required String baslangicTarihi,
     required String bitisTarihi,
   }) async {
-    final otopark =  await  _firestore.collection(_CollectionPath.otopark).where("uid",isEqualTo: model.uid).get();
+    final otopark =  await  _firestore.collection(_CollectionPath.otopark).doc(model.firebaseId).get();
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracPlaka = plaka;
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracVarMi = true;
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].baslangicTarihi = baslangicTarihi;
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].bitisTarihi = bitisTarihi;
-    otopark.docs.first.reference.update(model.toMap());
+    otopark.reference.update(model.toMap());
+  }
 
+
+  Future<void> araciOtoparktanCikar({
+    required OtoparkModel model,
+    required int katIndex,
+    required int parkAlaniIndex,
+  }) async {
+    final otopark =  await  _firestore.collection(_CollectionPath.otopark).doc(model.firebaseId).get();
+    model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracPlaka = "";
+    model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracVarMi = false;
+    model.katlar![katIndex].parkYerleri![parkAlaniIndex].baslangicTarihi = "";
+    model.katlar![katIndex].parkYerleri![parkAlaniIndex].bitisTarihi = "";
+    otopark.reference.update(model.toMap());
   }
 
   Future<void> vehicleUpdate(VehicleModel vehicleModel) async {
