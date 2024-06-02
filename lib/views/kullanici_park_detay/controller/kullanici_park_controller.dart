@@ -61,6 +61,6 @@ class KullaniciParkController extends ChangeNotifier{
   }
 
   void _vehicleUpdate(VehicleModel vehicleModel){
-    _fireStoreServices.vehicleUpdate(vehicleModel);
+    _fireStoreServices.vehicleUpdatePlaka(vehicleModel);
   }
 }

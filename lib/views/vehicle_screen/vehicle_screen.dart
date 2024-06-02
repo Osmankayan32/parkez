@@ -54,7 +54,11 @@ class VehicleSecreen extends StatelessWidget {
                   return const Center(child: Text("Araç bulunamadı"));
                 }
 
-                List<VehicleModel> data = snapshot.data!.docs.map((e) => VehicleModel.fromJson(e.data() as Map<String, dynamic>)).toList();
+                List<VehicleModel> data = snapshot.data!.docs.map((e) {
+                  final model = VehicleModel.fromJson(e.data() as Map<String, dynamic>);
+                  model.id = e.id;
+                  return model;
+                }).toList();
                 return ListView.builder(
                     itemCount: data.length,
                     itemBuilder: (context, index) {

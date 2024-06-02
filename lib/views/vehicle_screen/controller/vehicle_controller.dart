@@ -47,8 +47,20 @@ class VehicleController extends ChangeNotifier {
     return isAdd;
   }
 
+  void updateVehicle(VehicleModel vehicleModel){
+    _fireStoreServices.updateVehicleId(vehicleModel: vehicleModel);
+  }
+  void removeVehicle(String plaka){
+    _fireStoreServices.removeVehicle(plaka: plaka);
+    notifyListeners();
+  }
   void selectVehicle(VehicleModel vehicleModel){
     seciliArac = vehicleModel;
+    notifyListeners();
+  }
+
+  void controllerRemoveVehicle(VehicleModel vehicleModel){
+
     notifyListeners();
   }
 }
