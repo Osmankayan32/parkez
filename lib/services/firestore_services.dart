@@ -132,8 +132,8 @@ class FireStoreServices {
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracVarMi = false;
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].baslangicTarihi = "";
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].bitisTarihi = "";
-    otopark.reference.update(model.toMap());
 
+    otopark.reference.update(model.toMap());
     final vehicle = await _firestore.collection(_CollectionPath.vehicles).where("plaka", isEqualTo: plaka).get();
 
     final vehicleModel = VehicleModel.fromJson(vehicle.docs.first.data());
