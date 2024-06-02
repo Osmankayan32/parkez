@@ -192,7 +192,13 @@ class OtoparkDetayScreen extends StatelessWidget {
   }) {
     return GestureDetector(
       onTap: () {
-        if (parkYeri.aracVarMi==false) {
+        if (parkYeri.bitisTarihi != null && parkYeri.bitisTarihi!.isNotEmpty) {
+          DateTime bistiZamani = DateTime.parse(parkYeri.bitisTarihi!);
+          if (bistiZamani.isBefore(DateTime.now())) {
+            parkYeri.aracVarMi = false;
+          }
+        }
+        if (parkYeri.aracVarMi == false) {
           return;
         }
         DateTime baslangicTarihi = DateTime.parse(parkYeri.baslangicTarihi!);
@@ -220,7 +226,12 @@ class OtoparkDetayScreen extends StatelessWidget {
                       final controller = ref.watch(otoparkDetayController);
                       return TextButton(
                         onPressed: () {
-                          controller.aracCikar(model: model, parkIndex: parkIndex, katIndex: katIndex);
+                          controller.aracCikar(
+                            model: model,
+                            parkIndex: parkIndex,
+                            katIndex: katIndex,
+                            plaka: parkYeri.aracPlaka??"",
+                          );
                           ExSnacBar.show("Araç Çıkartıldı", color: Colors.green);
                           Navigator.pop(context);
                         },

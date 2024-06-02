@@ -55,134 +55,140 @@ class _ParkOnaylamaState extends State<ParkOnaylama> {
     }
     // en az 15 dakika olmalı
 
+
     if (bitisZamani!.difference(baslangicZamani!).inMinutes < 15) {
       return "Lütfen en az 15 dakika olacak şekilde seçim yapınız";
     }
-    return null;
-  }
 
-  void ucretHesapla() {
-    double ucret = widget.otoparkModel.saatlikUcret ?? 12;
+      return null;
+    }
 
-    int dakika = bitisZamani!.difference(baslangicZamani!).inHours;
+    void ucretHesapla() {
+      double ucret = widget.otoparkModel.saatlikUcret ?? 12;
 
-    double _topUcret = ucret * dakika;
-    setState(() {
-      topUcret = _topUcret;
-    });
-  }
+      int dakika = bitisZamani!.difference(baslangicZamani!).inHours;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Park Alanı Seç"),
-      ),
-      body: Consumer(builder: (context, ref, child) {
-        final controller = ref.read(kullaniciParkController);
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.9,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
+      double _topUcret = ucret * dakika;
+      setState(() {
+        topUcret = _topUcret;
+      });
+    }
+
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("Park Alanı Seç"),
+        ),
+        body: Consumer(builder: (context, ref, child) {
+          final controller = ref.read(kullaniciParkController);
+          return Container(
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.9,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme
+                  .of(context)
+                  .scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text("Başlangıç Zamanı :", style: _style),
-                    Expanded(
-                      child: TextButton(
-                          onPressed: () {
-                            DateTime date = DateTime.now();
-                            ExCupertinoDatePicker.showPicker(context, mode: CupertinoDatePickerMode.time, minimumDate: DateTime.now(),
-                                onDateTimeChanged: (dateTime) {
-                              date = dateTime;
-                            }, selectFunction: () {
-                              setState(() {
-                                baslangicZamani = date;
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text("Başlangıç Zamanı :", style: _style),
+                      Expanded(
+                        child: TextButton(
+                            onPressed: () {
+                              DateTime date = DateTime.now();
+                              ExCupertinoDatePicker.showPicker(context, mode: CupertinoDatePickerMode.time, minimumDate: DateTime.now(),
+                                  onDateTimeChanged: (dateTime) {
+                                    date = dateTime;
+                                  }, selectFunction: () {
+                                    setState(() {
+                                      baslangicZamani = date;
+                                    });
+                                    Navigator.pop(context);
+                                    log("tarih seçildi : $date");
+                                  });
+                            },
+                            child: baslangicZamani == null
+                                ? const Text("Seç")
+                                : AutoSizeText(
+                              maxLines: 1,
+                              formatDate(baslangicZamani!),
+                              style: _style2,
+                            )),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text("Bitiş Zamanı :", style: _style),
+                      Expanded(
+                        child: TextButton(
+                            onPressed: () {
+                              DateTime date = DateTime.now();
+                              ExCupertinoDatePicker.showPicker(context, minimumDate: DateTime.now(), onDateTimeChanged: (dateTime) {
+                                date = dateTime;
+                              }, selectFunction: () {
+                                setState(() {
+                                  bitisZamani = date;
+                                });
+                                Navigator.pop(context);
+                                log("tarih seçildi : $date");
+                                ucretHesapla();
                               });
-                              Navigator.pop(context);
-                              log("tarih seçildi : $date");
-                            });
-                          },
-                          child: baslangicZamani == null
-                              ? const Text("Seç")
-                              : AutoSizeText(
-                                  maxLines: 1,
-                                  formatDate(baslangicZamani!),
-                                  style: _style2,
-                                )),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text("Bitiş Zamanı :", style: _style),
-                    Expanded(
-                      child: TextButton(
-                          onPressed: () {
-                            DateTime date = DateTime.now();
-                            ExCupertinoDatePicker.showPicker(context, minimumDate: DateTime.now(), onDateTimeChanged: (dateTime) {
-                              date = dateTime;
-                            }, selectFunction: () {
-                              setState(() {
-                                bitisZamani = date;
-                              });
-                              Navigator.pop(context);
-                              log("tarih seçildi : $date");
-                              ucretHesapla();
-                            });
-                          },
-                          child: bitisZamani == null
-                              ? const Text("Seç")
-                              : AutoSizeText(
-                                  formatDate(bitisZamani!),
-                                  style: _style2,
-                                )),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text("Toplam Ucret :", style: _style),
-                    const SizedBox(width: 10),
-                    Text("$topUcret TL", style: _style.copyWith(color: Colors.blue)),
-                  ],
-                ),
-                Spacer(),
-                CustomButon(
-                    onTap: () {
-                      String? validate = validateTimes();
-                      if (validate != null) {
-                        ExSnacBar.show(validate, color: Colors.red);
-                        return;
-                      }
-                      controller.otoparkAlaniSec(
-                        model: widget.otoparkModel,
-                        katIndex: widget.katIndex,
-                        parkIndex: widget.parkIndex,
-                        plaka: widget.plaka,
-                        baslangic: baslangicZamani!.toIso8601String(),
-                        bitis: bitisZamani!.toIso8601String(),
-                      );
-                      Navigator.pop(context);
-
-                    },
-                    height: 50,
-                    width: 200,
-                    child: const Text("Parkı Onayla", style: TextStyle(color: Colors.white))),
-              ],
+                            },
+                            child: bitisZamani == null
+                                ? const Text("Seç")
+                                : AutoSizeText(
+                              formatDate(bitisZamani!),
+                              style: _style2,
+                            )),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text("Toplam Ucret :", style: _style),
+                      const SizedBox(width: 10),
+                      Text("$topUcret TL", style: _style.copyWith(color: Colors.blue)),
+                    ],
+                  ),
+                  Spacer(),
+                  CustomButon(
+                      onTap: () {
+                        String? validate = validateTimes();
+                        if (validate != null) {
+                          ExSnacBar.show(validate, color: Colors.red);
+                          return;
+                        }
+                        controller.otoparkAlaniSec(
+                          model: widget.otoparkModel,
+                          katIndex: widget.katIndex,
+                          parkIndex: widget.parkIndex,
+                          plaka: widget.plaka,
+                          baslangic: baslangicZamani!.toIso8601String(),
+                          bitis: bitisZamani!.toIso8601String(),
+                        );
+                        Navigator.pop(context);
+                      },
+                      height: 50,
+                      width: 200,
+                      child: const Text("Parkı Onayla", style: TextStyle(color: Colors.white))),
+                ],
+              ),
             ),
-          ),
-        );
-      }),
-    );
+          );
+        }),
+      );
+    }
   }
-}

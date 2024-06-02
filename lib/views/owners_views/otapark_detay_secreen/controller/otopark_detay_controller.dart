@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login_screen/models/otopark_model.dart';
 
+import '../../../../models/vehicle_model.dart';
 import '../../../../services/firestore_services.dart';
 import '../../../../services/locator.dart';
 
@@ -27,11 +28,12 @@ class OtoparkDetayController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void aracCikar({required OtoparkModel model, required int parkIndex, required int katIndex}) {
+  void aracCikar({required OtoparkModel model, required int parkIndex, required int katIndex, required String plaka}) {
     _fireStoreServices.araciOtoparktanCikar(
       model: model,
       parkAlaniIndex: parkIndex,
       katIndex: katIndex,
+      plaka: plaka,
     );
   }
   Stream<DocumentSnapshot<Map<String, dynamic>>> otoparkGetir(String otoparkId){

@@ -15,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
       ),
       body: Consumer(builder: (context, ref, child) {
         final controller = ref.read(profileController);
-
+        final user = controller.getCurrentUser();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -29,6 +29,16 @@ class ProfileScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 )),
+            const SizedBox(height: 10),
+            Column(
+              children: [
+                Text(
+                  'Email: ${user?.email}',
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+
+              ],
+            ),
             TextButton(
                 onPressed: () => controller.signOut(context),
                 child: const Text('Çıkış Yap', style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)))

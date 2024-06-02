@@ -125,6 +125,7 @@ class FireStoreServices {
     required OtoparkModel model,
     required int katIndex,
     required int parkAlaniIndex,
+    required String plaka,
   }) async {
     final otopark = await _firestore.collection(_CollectionPath.otopark).doc(model.firebaseId).get();
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].aracPlaka = "";
@@ -132,6 +133,16 @@ class FireStoreServices {
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].baslangicTarihi = "";
     model.katlar![katIndex].parkYerleri![parkAlaniIndex].bitisTarihi = "";
     otopark.reference.update(model.toMap());
+
+    final vehicle = await _firestore.collection(_CollectionPath.vehicles).where("plaka", isEqualTo: plaka).get();
+
+    final vehicleModel = VehicleModel.fromJson(vehicle.docs.first.data());
+
+    vehicleModel.aracParktaMi = false;
+    vehicleModel.aracParkBitisZamani = "";
+    vehicleModel.aracParkBaslangicZamani = "";
+
+    vehicle.docs.first.reference.update(vehicleModel.toJson());
   }
 
   // plakdan buluyor

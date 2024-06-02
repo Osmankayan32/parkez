@@ -196,6 +196,12 @@ class KullaniciParkDetayScreen extends StatelessWidget {
     required String plaka,
   }) {
     return Builder(builder: (context) {
+      if (parkYeri.bitisTarihi != null && parkYeri.bitisTarihi!.isNotEmpty) {
+        DateTime bistiZamani = DateTime.parse(parkYeri.bitisTarihi!);
+        if (bistiZamani.isBefore(DateTime.now())) {
+          parkYeri.aracVarMi = false;
+        }
+      }
       return InkWell(
         onTap: () {
           if (parkYeri.aracVarMi!) {
