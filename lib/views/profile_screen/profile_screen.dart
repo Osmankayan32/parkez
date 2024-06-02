@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login_screen/views/profile_screen/controller/profile_controler.dart';
@@ -30,15 +31,25 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 )),
             const SizedBox(height: 10),
-            Column(
-              children: [
-                Text(
-                  'Email: ${user?.email}',
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            TextButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                textStyle: MaterialStateProperty.all(
+                  const TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-
-              ],
+              ),
+              child: Text('Email: ${user?.email}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )),
             ),
+            const SizedBox(height: 10),
             TextButton(
                 onPressed: () => controller.signOut(context),
                 child: const Text('Çıkış Yap', style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)))
