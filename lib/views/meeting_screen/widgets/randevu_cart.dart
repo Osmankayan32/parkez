@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login_screen/models/vehicle_model.dart';
@@ -14,8 +13,9 @@ class RandevuCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime parkBitisZamani = DateTime.parse(vehicle.aracParkBitisZamani!);
-    String formattedDate = DateFormat('dd-MM-yyyy – kk:mm').format(parkBitisZamani);
+    DateTime? parkBitisZamani = DateTime.tryParse(vehicle.aracParkBitisZamani!);
+    String formattedDate = DateFormat('dd-MM-yyyy – kk:mm').format(parkBitisZamani!);
+
     return Container(
       margin: EdgeInsets.all(16),
       decoration: BoxDecoration(
