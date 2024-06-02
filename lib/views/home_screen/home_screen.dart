@@ -10,6 +10,7 @@ import 'package:login_screen/views/vehicle_screen/controller/vehicle_controller.
 import 'package:login_screen/views/vehicle_screen/vehicle_screen.dart';
 import 'package:login_screen/widgets/custom_buton.dart';
 
+import '../meeting_screen/meeting_view.dart';
 import '../park_screen/park_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -71,30 +72,37 @@ class HomeScreen extends StatelessWidget {
               Consumer(builder: (context, ref, child) {
                 VehicleModel? vehicle = ref.watch(vehicleController.select((value) => value.seciliArac));
                 return CustomButon(
-                  onTap: vehicle==null?null:() {
-
-                    String plaka = vehicle.plaka!;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ParkScreen(plaka: plaka)),
-                    );
-                  },
+                  onTap: vehicle == null
+                      ? null
+                      : () {
+                          String plaka = vehicle.plaka!;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ParkScreen(plaka: plaka)),
+                          );
+                        },
                   child: Text("Otaparklar", style: TextStyle(fontSize: 18, color: Colors.white)),
                   width: 200,
                 );
               }),
-              CustomButon(
-                onTap: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const VehicleSecreen()),
-                  );
+              Consumer(builder: (context, ref, child) {
+                VehicleModel? vehicle = ref.watch(vehicleController.select((value) => value.seciliArac));
 
-                  // "Araç Seç" butonuna basıldığında yapılacak işlemler
-                },
-                width: 200,
-                child: const Text("Randevularım", style: const TextStyle(fontSize: 18, color: Colors.white)),
-              ),
+                return CustomButon(
+                  onTap: vehicle == null
+                      ? null
+                      : () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MeetingView(vehicleModel: vehicle)),
+                          );
+
+                          // "Araç Seç" butonuna basıldığında yapılacak işlemler
+                        },
+                  width: 200,
+                  child: const Text("Randevularım", style: const TextStyle(fontSize: 18, color: Colors.white)),
+                );
+              }),
             ],
           ),
         ),
