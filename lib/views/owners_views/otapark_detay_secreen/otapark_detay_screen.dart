@@ -22,49 +22,77 @@ class OtoparkDetayScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(otoparkModel!.otoparkIsmi!)),
-      body: Consumer(
-        builder: (context,ref,child) {
-          final controller = ref.read(otoparkDetayController);
-          return StreamBuilder<DocumentSnapshot>(
-              stream: controller.otoparkGetir(otoparkModel.firebaseId!),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const WatingWidget();
-                }
-                if (snapshot.hasError) {
-                  return const Center(child: Text("Hata oluştu"));
-                }
-                if (snapshot.data == null) {
-                  return const Center(child: Text("Araç bulunamadı"));
-                }
-                OtoparkModel otoparkModel = OtoparkModel.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+      body: Consumer(builder: (context, ref, child) {
+        final controller = ref.read(otoparkDetayController);
+        return StreamBuilder<DocumentSnapshot>(
+            stream: controller.otoparkGetir(otoparkModel.firebaseId!),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const WatingWidget();
+              }
+              if (snapshot.hasError) {
+                return const Center(child: Text("Hata oluştu"));
+              }
+              if (snapshot.data == null) {
+                return const Center(child: Text("Araç bulunamadı"));
+              }
+              OtoparkModel otoparkModel = OtoparkModel.fromJson(snapshot.data!.data() as Map<String, dynamic>);
 
-                otoparkModel.firebaseId = snapshot.data!.id;
+              otoparkModel.firebaseId = snapshot.data!.id;
 
-                return Column(
+              return Column(
                 children: [
+                  Consumer(builder: (context, ref, child) {
+                    int aktifIndex = ref.watch(otoparkDetayController.select((value) => value.aktifKatIndex));
+                    return DropdownButton(
+                      value: aktifIndex,
+                      onChanged: (index) {
+                        controller.aktifIndexiDegistir(index as int);
+                      },
+                      items: [
+                        ...List.generate(otoparkModel.katlar!.length, (index) {
+                          return DropdownMenuItem(
+                            value: index,
+                            child: Text(otoparkModel.katlar![index].katIsmi!),
+                          );
+                        })
+                      ],
+                    );
+                  }),
+                  const SizedBox(height: 20),
                   Expanded(
                     child: Consumer(builder: (context, ref, child) {
                       final controller = ref.watch(otoparkDetayController);
+                      final int aktifIndex = ref.watch(otoparkDetayController.select((value) => value.aktifKatIndex));
+                      final katmodel = otoparkModel.katlar![aktifIndex];
+
                       return PageView.builder(
-                          itemCount: otoparkModel.katlar!.length,
+                          itemCount: katmodel.siraSayisi,
                           onPageChanged: (index) {
-                            controller.aktifIndexiDegistir(index);
+                            //controller.aktifIndexiDegistir(index);
                           },
-                          itemBuilder: (context, katIndex) {
-                            OtaparkKatModel kat = otoparkModel.katlar![katIndex];
+                          itemBuilder: (context, siraIndex) {
+                            final aracKapasitesi = katmodel.katKapasitesi! / katmodel.siraSayisi!;
+                            final parkYerleri = katmodel.parkYerleri!.skip(siraIndex * aracKapasitesi.toInt()).take(aracKapasitesi.toInt()).toList();
+                            return GridView.count(
+                              crossAxisCount: 2,
+                              children: [
+                                ...List.generate(aracKapasitesi.toInt(), (index) {
+                                  return parkYeriWidger(
+                                    parkYerleri[index],
+                                    context: context,
+                                    model: otoparkModel,
+                                    parkIndex: index,
+                                    katIndex: aktifIndex,
+                                    tersCevir: index % 2 == 0,
+                                  );
+                                })
+                              ],
+                            );
+                            /*
                             return SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  const SizedBox(height: 20),
-                                  Text(
-                                    kat.katIsmi!,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Themes.primaryColor,
-                                    ),
-                                  ),
                                   ListView.separated(
                                       physics: const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
@@ -90,11 +118,7 @@ class OtoparkDetayScreen extends StatelessWidget {
                                               parkIndex: firstIndex,
                                               katIndex: katIndex,
                                             )),
-                                            Container(
-                                              height: 50,
-                                              width: 1,
-                                              color: Colors.black,
-                                            ),
+                                            Container(height: 50, width: 1, color: Colors.black),
                                             Expanded(
                                                 child: parkYeriWidger(
                                               parkYeri2,
@@ -119,9 +143,11 @@ class OtoparkDetayScreen extends StatelessWidget {
                                 ],
                               ),
                             );
+                            */
                           });
                     }),
                   ),
+                  /*
                   SizedBox(
                     height: 40,
                     child: Consumer(builder: (context, ref, child) {
@@ -148,12 +174,11 @@ class OtoparkDetayScreen extends StatelessWidget {
                       );
                     }),
                   )
+                   */
                 ],
               );
-            }
-          );
-        }
-      ),
+            });
+      }),
     );
   }
 

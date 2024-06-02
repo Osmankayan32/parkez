@@ -175,6 +175,7 @@ class _KatKayitWidgetState extends State<_KatKayitWidget> {
     }
     final isimController = TextEditingController();
     final kapasiteController = TextEditingController();
+    final siraController = TextEditingController();
     return Consumer(builder: (context, ref, child) {
       final controller = ref.read(ownerController);
       return Column(
@@ -182,13 +183,16 @@ class _KatKayitWidgetState extends State<_KatKayitWidget> {
         children: [
           CustomTextField(hintText: "Kat İsmi", controller: isimController),
           CustomTextField(hintText: "Araç Kapasitesi", controller: kapasiteController),
+          CustomTextField(hintText: "Katta bulunan sıra sayısı", controller: siraController),
           CustomButon(
             onTap: () {
               final isim = isimController.text;
               final kapasite = int.parse(kapasiteController.text);
+              final sira = int.parse(siraController.text);
               final katModel = OtaparkKatModel(
                 katIsmi: isim,
                 katKapasitesi: kapasite,
+                siraSayisi: sira,
               );
               controller.katlar.add(katModel);
               setState(() {
