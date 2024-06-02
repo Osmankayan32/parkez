@@ -59,11 +59,49 @@ class KullaniciParkController extends ChangeNotifier {
     vehicleModel.aracParkBitisZamani = bitis;
     vehicleModel.aracParkBaslangicZamani = baslangic;
     _fireStoreServices.otaparkAlaniSec(
-        plaka: plaka, model: model, katIndex: katIndex, parkAlaniIndex: parkIndex, baslangicTarihi: baslangic, bitisTarihi: bitis);
+      plaka: plaka,
+      model: model,
+      katIndex: katIndex,
+      parkAlaniIndex: parkIndex,
+      baslangicTarihi: baslangic,
+      bitisTarihi: bitis,
+    );
     _vehicleUpdate(vehicleModel);
   }
 
   void _vehicleUpdate(VehicleModel vehicleModel) {
     _fireStoreServices.vehicleUpdatePlaka(vehicleModel);
+  }
+
+  Future<void> otoparkiGuncele({
+    required OtoparkModel model,
+    required String plaka,
+    required int katIndex,
+    required int parkIndex,
+    required String baslangic,
+    required String bitis,
+  }) async {
+    final data = await _fireStoreServices.getVehicle();
+    List<VehicleModel> vehicleList = data.docs.map((e) {
+      VehicleModel model = VehicleModel.fromJson(e.data());
+      model.id = e.id;
+      return VehicleModel.fromJson(e.data());
+    }).toList();
+
+    VehicleModel vehicleModel = vehicleList.firstWhere((element) => element.plaka == plaka);
+
+    vehicleModel.aracParkBitisZamani = bitis;
+    vehicleModel.aracParkBaslangicZamani = baslangic;
+
+    _vehicleUpdate(vehicleModel);
+
+    _fireStoreServices.otaparkAlaniSec(
+      plaka: plaka,
+      model: model,
+      katIndex: katIndex,
+      parkAlaniIndex: parkIndex,
+      baslangicTarihi: vehicleModel.aracParkBaslangicZamani!,
+      bitisTarihi: vehicleModel.aracParkBitisZamani!,
+    );
   }
 }

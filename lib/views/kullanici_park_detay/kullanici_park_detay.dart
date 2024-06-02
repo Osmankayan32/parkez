@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:login_screen/models/otopark_model.dart';
 import 'package:login_screen/views/owners_views/otapark_detay_secreen/controller/otopark_detay_controller.dart';
 
 import '../../../themes/light_theme.dart';
+import '../../widgets/custom_time_picker.dart';
 import '../../widgets/wating_widgets.dart';
 import 'controller/kullanici_park_controller.dart';
 import 'widgets/park_onaylama_widget.dart';
@@ -215,22 +217,13 @@ class KullaniciParkDetayScreen extends StatelessWidget {
             if (isMe) {
               showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text("Araç Çıkışı"),
-                        content: Text("Araç çıkışı yapmak istediğinize emin misiniz?"),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("İptal")),
-                          TextButton(
-                              onPressed: () {
-                                //controller.aracCikisYap(otoparkModel, katIndex, parkIndex);
-                                Navigator.pop(context);
-                              },
-                              child: Text("Çıkış Yap")),
-                        ],
+                  builder: (context) => DateAlertWidget(
+                        bitis: parkYeri.bitisTarihi!,
+                        baslangic: parkYeri.baslangicTarihi!,
+                        model: otoparkModel,
+                        plaka: plaka,
+                        katIndex: katIndex,
+                        parkIndex: parkIndex,
                       ));
               return;
             }
@@ -277,5 +270,135 @@ class KullaniciParkDetayScreen extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class DateAlertWidget extends StatefulWidget {
+  final OtoparkModel model;
+  final String plaka;
+  final int katIndex;
+  final int parkIndex;
+
+  const DateAlertWidget({
+    super.key,
+    required this.bitis,
+    required this.baslangic,
+    required this.model,
+    required this.plaka,
+    required this.katIndex,
+    required this.parkIndex,
+  });
+
+  final String bitis;
+  final String baslangic;
+
+  @override
+  State<DateAlertWidget> createState() => _DateAlertWidgetState();
+}
+
+class _DateAlertWidgetState extends State<DateAlertWidget> {
+  String bitis = "";
+  String baslangic = "";
+
+  bool guncelemeOldumu = false;
+
+  @override
+  void initState() {
+    bitis = widget.bitis;
+    baslangic = widget.baslangic;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Park Bilgisi"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextButton(
+              onPressed: () {
+                DateTime date = DateTime.now();
+                ExCupertinoDatePicker.showPicker(
+                  context,
+                  mode: CupertinoDatePickerMode.time,
+                  minimumDate: DateTime.now(),
+                  onDateTimeChanged: (dateTime) {
+                    date = dateTime;
+                  },
+                  selectFunction: () {
+                    setState(() {
+                      log("tarih seçildi : $date");
+                      baslangic = DateFormat("yyyy-MM-dd HH:mm").format(date);
+                      guncelemeOldumu = true;
+                    });
+                    Navigator.pop(context);
+                  },
+                );
+              },
+              child: Text(
+                "Başlangıç Tarihi : $baslangic",
+                style: const TextStyle(color: Colors.black),
+              )),
+          TextButton(
+            onPressed: () {
+              DateTime date = DateTime.now();
+              DateTime minimumDate = DateTime.parse(widget.baslangic);
+              minimumDate = minimumDate.add(const Duration(minutes: 15));
+              ExCupertinoDatePicker.showPicker(
+                context,
+                mode: CupertinoDatePickerMode.dateAndTime,
+                minimumDate: minimumDate,
+                initialDate: DateTime.parse(widget.bitis),
+                onDateTimeChanged: (dateTime) {
+                  date = dateTime;
+                },
+                selectFunction: () {
+                  setState(() {
+                    log("tarih seçildi : $date");
+                    bitis = DateFormat("yyyy-MM-dd HH:mm").format(date);
+                    guncelemeOldumu = true;
+                  });
+                  Navigator.pop(context);
+                },
+              );
+            },
+            child: Text(
+              "Bitiş Tarihi : ${bitis}",
+              style: const TextStyle(color: Colors.black),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("İptal", style: TextStyle(color: Colors.red))),
+              if (guncelemeOldumu)
+                Consumer(builder: (context, ref, child) {
+                  final controller = ref.read(kullaniciParkController);
+                  return TextButton(
+                      onPressed: () {
+                        controller.otoparkiGuncele(
+                          model: widget.model,
+                          plaka: widget.plaka,
+                          katIndex: widget.katIndex,
+                          parkIndex: widget.parkIndex,
+                          baslangic: baslangic,
+                          bitis: bitis,
+                        );
+                        Navigator.pop(context, {"baslangic": baslangic, "bitis": bitis, "guncelleme": guncelemeOldumu});
+                      },
+                      child: const Text("Güncelle"));
+                })
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

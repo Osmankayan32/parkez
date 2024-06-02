@@ -6,6 +6,7 @@ class ExCupertinoDatePicker {
     BuildContext context, {
     required void Function(DateTime dateTime) onDateTimeChanged,
     DateTime? minimumDate,
+    DateTime? initialDate,
     CupertinoDatePickerMode mode = CupertinoDatePickerMode.dateAndTime,
     required void Function() selectFunction,
   }) async {
@@ -19,7 +20,7 @@ class ExCupertinoDatePicker {
             children: [
               Expanded(
                 child: CupertinoDatePicker(
-                  initialDateTime: DateTime.now(),
+                  initialDateTime: initialDate ?? DateTime.now(),
                   minimumDate: minimumDate,
                   maximumDate: DateTime.now().add(const Duration(days: 365)),
                   mode:mode,
