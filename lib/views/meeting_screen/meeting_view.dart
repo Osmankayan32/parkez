@@ -16,12 +16,27 @@ class MeetingView extends StatefulWidget {
 }
 
 class _MeetingViewState extends State<MeetingView> {
-  VehicleModel vehicle = VehicleModel(
-    aracName: 'Tesla Model S',
-    plaka: '34 ABC 34',
-    aracParkBitisZamani: DateTime.now().add(Duration(hours: 2)).toIso8601String(),
-    aracParktaMi: true,
-  );
+  List<VehicleModel> vehicleList = [
+    //TODO: list
+    VehicleModel(
+      aracName: 'Tesla Model S',
+      plaka: '34 ABC 34',
+      aracParkBitisZamani: DateTime.now().add(Duration(hours: 2)).toIso8601String(),
+      aracParktaMi: true,
+    ),
+    VehicleModel(
+      aracName: 'Tesla Model S',
+      plaka: '34 ABC 34',
+      aracParkBitisZamani: DateTime.now().add(Duration(hours: 2)).toIso8601String(),
+      aracParktaMi: true,
+    ),
+    VehicleModel(
+      aracName: 'Tesla Model S',
+      plaka: '34 ABC 34',
+      aracParkBitisZamani: DateTime.now().add(Duration(hours: 2)).toIso8601String(),
+      aracParktaMi: true,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +51,13 @@ class _MeetingViewState extends State<MeetingView> {
           },
           child: Icon(Icons.add, color: Colors.white),
         ),
-        body: Column(children: [
-          RandevuCart(vehicle: vehicle),
-        ]));
+        body: ListView.builder(
+          itemCount: vehicleList.length,
+          itemBuilder: (context, index) {
+            return RandevuCart(
+              vehicle: vehicleList[index],
+            );
+          },
+        ));
   }
 }
