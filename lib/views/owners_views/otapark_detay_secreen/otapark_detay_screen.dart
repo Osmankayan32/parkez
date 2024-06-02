@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -190,17 +192,22 @@ class OtoparkDetayScreen extends StatelessWidget {
     required int parkIndex,
     required int katIndex,
   }) {
+    bool aracVarMi = parkYeri.aracVarMi ?? false;
+
+    if (parkYeri.bitisTarihi != null && parkYeri.bitisTarihi!.isNotEmpty) {
+      DateTime bistiZamani = DateTime.parse(parkYeri.bitisTarihi!);
+      if (bistiZamani.isBefore(DateTime.now())) {
+        aracVarMi = false;
+        parkYeri.aracPlaka = null;
+      }
+    }
     return GestureDetector(
       onTap: () {
-        if (parkYeri.bitisTarihi != null && parkYeri.bitisTarihi!.isNotEmpty) {
-          DateTime bistiZamani = DateTime.parse(parkYeri.bitisTarihi!);
-          if (bistiZamani.isBefore(DateTime.now())) {
-            parkYeri.aracVarMi = false;
-          }
-        }
-        if (parkYeri.aracVarMi == false) {
+        log("parkYeri.aracVarMi : ${parkYeri.aracVarMi}");
+        if (aracVarMi == false) {
           return;
         }
+        log("parkYeri.baslangicTarihi : ${parkYeri.baslangicTarihi}");
         DateTime baslangicTarihi = DateTime.parse(parkYeri.baslangicTarihi!);
         DateTime bitisTarihi = DateTime.parse(parkYeri.bitisTarihi!);
         showDialog(
@@ -230,7 +237,7 @@ class OtoparkDetayScreen extends StatelessWidget {
                             model: model,
                             parkIndex: parkIndex,
                             katIndex: katIndex,
-                            plaka: parkYeri.aracPlaka??"",
+                            plaka: parkYeri.aracPlaka ?? "",
                           );
                           ExSnacBar.show("Araç Çıkartıldı", color: Colors.green);
                           Navigator.pop(context);
@@ -259,7 +266,7 @@ class OtoparkDetayScreen extends StatelessWidget {
               margin: const EdgeInsets.all(10),
               //color: parkYeri.aracVarMi! ? Colors.green : Colors.red,
               child: SvgPicture.asset(
-                color: parkYeri.aracVarMi! ? Themes.primaryColor : Colors.black38, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
+                color: aracVarMi! ? Themes.primaryColor : Colors.black38, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
                 "assets/icons/select_car.svg",
                 fit: BoxFit.contain,
               ),

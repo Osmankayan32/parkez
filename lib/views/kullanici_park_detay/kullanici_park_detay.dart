@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -202,11 +204,39 @@ class KullaniciParkDetayScreen extends StatelessWidget {
           parkYeri.aracVarMi = false;
         }
       }
+      bool isMe = parkYeri.aracPlaka == plaka;
+      Color color = parkYeri.aracVarMi! ? Themes.primaryColor : Colors.black38;
+      if (isMe && parkYeri.aracVarMi!) {
+        color = Colors.green;
+      }
       return InkWell(
         onTap: () {
           if (parkYeri.aracVarMi!) {
+            if (isMe) {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text("Araç Çıkışı"),
+                        content: Text("Araç çıkışı yapmak istediğinize emin misiniz?"),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("İptal")),
+                          TextButton(
+                              onPressed: () {
+                                //controller.aracCikisYap(otoparkModel, katIndex, parkIndex);
+                                Navigator.pop(context);
+                              },
+                              child: Text("Çıkış Yap")),
+                        ],
+                      ));
+              return;
+            }
             return;
           }
+
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -238,7 +268,7 @@ class KullaniciParkDetayScreen extends StatelessWidget {
                 //color: parkYeri.aracVarMi! ? Colors.green : Colors.red,
                 child: SvgPicture.asset(
                   parkYeri.aracVarMi! ? "assets/icons/select_car.svg" : "assets/icons/un_select_car.svg",
-                  color: parkYeri.aracVarMi! ? Themes.primaryColor : Colors.black38, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
+                  color: color, //parkYeri.aracVarMi! ? Colors.green : Colors.red,
                   fit: BoxFit.contain,
                 ),
               ),
