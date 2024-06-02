@@ -192,6 +192,9 @@ class OtoparkDetayScreen extends StatelessWidget {
   }) {
     return GestureDetector(
       onTap: () {
+        if (parkYeri.aracVarMi==false) {
+          return;
+        }
         DateTime baslangicTarihi = DateTime.parse(parkYeri.baslangicTarihi!);
         DateTime bitisTarihi = DateTime.parse(parkYeri.bitisTarihi!);
         showDialog(
