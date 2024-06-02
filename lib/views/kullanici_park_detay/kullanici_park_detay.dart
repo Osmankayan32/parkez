@@ -38,81 +38,122 @@ class KullaniciParkDetayScreen extends StatelessWidget {
                 OtoparkModel data = OtoparkModel.fromJson(snapshot.data!.data() as Map<String, dynamic>);
                 return Column(
                   children: [
+                    Consumer(builder: (context, ref, child) {
+                      int aktifIndex = ref.watch(kullaniciParkController.select((value) => value.aktifKatIndex));
+                      return DropdownButton(
+                        value: aktifIndex,
+                        onChanged: (index) {
+                          controller.aktifKatIndexAta(index as int);
+                        },
+                        items: [
+                          ...List.generate(otoparkModel.katlar!.length, (index) {
+                            return DropdownMenuItem(
+                              value: index,
+                              child: Text(otoparkModel.katlar![index].katIsmi!),
+                            );
+                          })
+                        ],
+                      );
+                    }),
                     Expanded(
                       child: Consumer(builder: (context, ref, child) {
-                        final controller = ref.read(kullaniciParkController);
+                        final controller = ref.watch(kullaniciParkController);
+                        final int aktifIndex = ref.watch(kullaniciParkController.select((value) => value.aktifKatIndex));
+                        final katmodel = otoparkModel.katlar![aktifIndex];
+
                         return PageView.builder(
-                            itemCount: data.katlar!.length,
+                            itemCount: katmodel.siraSayisi,
                             onPageChanged: (index) {
-                              controller.aktifKatIndexAta(index);
+                              //controller.aktifIndexiDegistir(index);
                             },
-                            itemBuilder: (context, index) {
-                              OtaparkKatModel kat = data.katlar![index];
-                              final int katIndex = index;
-                              return SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      kat.katIsmi!,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Themes.primaryColor,
-                                      ),
-                                    ),
-                                    ListView.separated(
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount: (kat.katKapasitesi ?? 0) ~/ 2,
-                                        controller: ScrollController(keepScrollOffset: false),
-                                        itemBuilder: (context, index) {
-                                          int firstIndex = index * 2;
-                                          ParkYeriModel? parkYeri1 = kat.parkYerleri?[firstIndex];
-                                          parkYeri1 ??= ParkYeriModel(parkYeriIsmi: "${firstIndex + 1}", aracVarMi: false);
-
-                                          int secondIndex = index * 2 + 1;
-                                          ParkYeriModel? parkYeri2 = kat.parkYerleri?[secondIndex];
-                                          parkYeri2 ??= ParkYeriModel(parkYeriIsmi: "${secondIndex + 1}", aracVarMi: false);
-
-                                          return Row(
-                                            children: [
-                                              Expanded(
-                                                  child: parkYeriWidger(parkYeri1,
-                                                      tersCevir: true,
-                                                      otoparkModel: otoparkModel,
-                                                      katIndex: katIndex,
-                                                      parkIndex: firstIndex,
-                                                      plaka: plaka,
-                                                      controller: controller)),
-                                              Container(height: 50, width: 1, color: Colors.black),
-                                              Expanded(
-                                                  child: parkYeriWidger(parkYeri2,
-                                                      otoparkModel: otoparkModel,
-                                                      katIndex: katIndex,
-                                                      parkIndex: secondIndex,
-                                                      plaka: plaka,
-                                                      controller: controller)),
-                                            ],
-                                          );
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Divider(
-                                              height: 15,
-                                              thickness: 1,
-                                              color: Colors.black,
-                                            ),
-                                          );
-                                        })
-                                  ],
-                                ),
+                            itemBuilder: (context, siraIndex) {
+                              final aracKapasitesi = katmodel.katKapasitesi! / katmodel.siraSayisi!;
+                              final parkYerleri =
+                                  katmodel.parkYerleri!.skip(siraIndex * aracKapasitesi.toInt()).take(aracKapasitesi.toInt()).toList();
+                              return GridView.count(
+                                crossAxisCount: 2,
+                                children: [
+                                  ...List.generate(aracKapasitesi.toInt(), (index) {
+                                    return parkYeriWidger(
+                                      parkYerleri[index],
+                                      controller: controller,
+                                      plaka: plaka,
+                                      tersCevir: index % 2 == 0,
+                                      otoparkModel: otoparkModel,
+                                      parkIndex: index,
+                                      katIndex: aktifIndex,
+                                      /*
+                                      parkYerleri[index],
+                                      context: context,
+                                      model: otoparkModel,
+                                      parkIndex: index,
+                                      katIndex: aktifIndex,
+                                      tersCevir: index % 2 == 0,
+                                      */
+                                    );
+                                  })
+                                ],
                               );
+                              /*
+                            return SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  ListView.separated(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: (kat.katKapasitesi ?? 0) ~/ 2,
+                                      controller: ScrollController(keepScrollOffset: false),
+                                      itemBuilder: (context, parkIndex) {
+                                        int firstIndex = parkIndex * 2;
+                                        ParkYeriModel? parkYeri1 = kat.parkYerleri?[firstIndex];
+                                        parkYeri1 ??= ParkYeriModel(parkYeriIsmi: "${firstIndex + 1}", aracVarMi: false);
+
+                                        int secondIndex = parkIndex * 2 + 1;
+                                        ParkYeriModel? parkYeri2 = kat.parkYerleri?[secondIndex];
+                                        parkYeri2 ??= ParkYeriModel(parkYeriIsmi: "${secondIndex + 1}", aracVarMi: false);
+
+                                        return Row(
+                                          children: [
+                                            Expanded(
+                                                child: parkYeriWidger(
+                                              parkYeri1,
+                                              tersCevir: true,
+                                              context: context,
+                                              model: otoparkModel,
+                                              parkIndex: firstIndex,
+                                              katIndex: katIndex,
+                                            )),
+                                            Container(height: 50, width: 1, color: Colors.black),
+                                            Expanded(
+                                                child: parkYeriWidger(
+                                              parkYeri2,
+                                              context: context,
+                                              model: otoparkModel,
+                                              parkIndex: secondIndex,
+                                              katIndex: katIndex,
+                                            )),
+                                          ],
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) {
+                                        return const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Divider(
+                                            height: 15,
+                                            thickness: 1,
+                                            color: Colors.black,
+                                          ),
+                                        );
+                                      })
+                                ],
+                              ),
+                            );
+                            */
                             });
                       }),
                     ),
-                    SizedBox(
+                    /*
+                    izedBox(
                       height: 40,
                       child: Consumer(builder: (context, ref, child) {
                         final int aktifIndex = ref.watch(kullaniciParkController.select((value) => value.aktifKatIndex));
@@ -138,6 +179,7 @@ class KullaniciParkDetayScreen extends StatelessWidget {
                         );
                       }),
                     )
+                     */
                   ],
                 );
               });
