@@ -92,6 +92,7 @@ class _ParkScreenState extends State<ParkScreen> {
         final distance = legs['distance']['text'];
         return distance;
       } else {
+        return "0";
         throw Exception('No routes found');
       }
     } else {
@@ -141,6 +142,7 @@ class _ParkScreenState extends State<ParkScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log("ParkScreen build");
     return Scaffold(
         floatingActionButton: Consumer(builder: (context, ref, child) {
           final controller = ref.read(parkScreenController);
@@ -213,6 +215,7 @@ class _ParkScreenState extends State<ParkScreen> {
                   return const WatingWidget();
                 }
                 if (snapshot.hasError) {
+                  log("Hata oluştu = ${snapshot.error}");
                   return const Center(child: Text("Hata oluştu"));
                 }
                 if (snapshot.data == null) {
@@ -234,6 +237,7 @@ class _ParkScreenState extends State<ParkScreen> {
                       }
 
                       if (snapshot.hasError) {
+                        log("Hata oluştu = ${snapshot.error}");
                         return const Center(child: Text("Hata oluştu"));
                       }
 
