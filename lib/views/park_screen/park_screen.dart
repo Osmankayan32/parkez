@@ -122,7 +122,15 @@ class _ParkScreenState extends State<ParkScreen> {
       int doluluk = 0;
       int kapasite = 0;
       for (OtaparkKatModel kat in otopark.katlar ?? []) {
-        doluluk += kat.parkYerleri!.where((element) => element.aracVarMi == true).length;
+        doluluk += kat.parkYerleri!.where((element) {
+          String? bitisTarihi = element.bitisTarihi;
+          if(bitisTarihi !=null&&bitisTarihi.isNotEmpty){
+            DateTime bitisTarihi = DateTime.parse(element.bitisTarihi!);
+            bool isAfter = DateTime.now().isAfter(bitisTarihi);
+            return isAfter==false;
+          }
+          return element.aracVarMi == true;
+        }).length;
         kapasite += kat.katKapasitesi??0;
       }
       listModels.add(ListModel(
@@ -178,6 +186,8 @@ class _ParkScreenState extends State<ParkScreen> {
                                   children: [
                                     Text("Otopark Adı: ${e.otoparkIsmi}"),
                                     Text("Otopark Saatlik Ücreti: ${e.saatlikUcret}"),
+                                    Text("Otopark Kapasitesi: ${e.otoparkKapasitesi}"),
+
                                   ],
                                 ),
                                 actions: [
