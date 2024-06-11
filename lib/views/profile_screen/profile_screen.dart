@@ -20,6 +20,7 @@ class ProfileScreen extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+           /*
             TextButton(
                 onPressed: () => otaparSayfasindanMi ? controller.kullaniciOlarakDevamEt(context) : controller.ownersSayfasinaGit(context),
                 child: Text(
@@ -30,6 +31,7 @@ class ProfileScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 )),
+            */
             const SizedBox(height: 10),
             TextButton(
               onPressed: () {},

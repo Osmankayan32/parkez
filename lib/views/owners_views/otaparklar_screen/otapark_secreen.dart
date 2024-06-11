@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login_screen/widgets/wating_widgets.dart';
 import '../../../models/otopark_model.dart';
 import '../../../themes/light_theme.dart';
+import '../../profile_screen/controller/profile_controler.dart';
 import '../../profile_screen/profile_screen.dart';
 import '../otapark_kayit_screen/widgets/step_widget.dart';
 import 'controller/otapark_controller.dart';
@@ -37,6 +38,28 @@ class _OtaparkScreenState extends State<OtaparkScreen> {
         ),
         appBar: AppBar(
           title: const Text("Otaparklarım"),
+          //TODO: burası gizli butona
+          leading: Consumer(builder: (context, ref, child) {
+            final controller = ref.read(profileController);
+            bool ciftTiklama = false;
+            return InkWell(
+              child: const SizedBox(
+                height: 30,
+                width: 30,
+              ),
+              onDoubleTap: () {
+                ciftTiklama = true;
+              },
+              onLongPress: () {
+                if (ciftTiklama) {
+                  log("çift tıklama $ciftTiklama");
+                  controller.kullaniciOlarakDevamEt(context);
+                  ciftTiklama = false;
+                }
+                // Scaffold.of(context).openDrawer();
+              },
+            );
+          }),
           actions: [
             IconButton(
               icon: const Icon(Icons.account_circle),
@@ -67,7 +90,7 @@ class _OtaparkScreenState extends State<OtaparkScreen> {
                 final response = snapshot.data!.docs;
                 List<OtoparkModel> data = snapshot.data!.docs.map((e) {
                   final model = OtoparkModel.fromJson(e.data() as Map<String, dynamic>);
-                  model.firebaseId= e.id;
+                  model.firebaseId = e.id;
                   return model;
                 }).toList();
                 return ListView.builder(

@@ -12,6 +12,7 @@ import 'package:login_screen/widgets/custom_buton.dart';
 
 import '../meeting_screen/meeting_view.dart';
 import '../park_screen/park_screen.dart';
+import '../profile_screen/controller/profile_controler.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,6 +21,31 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Consumer(
+          builder: (context,ref,child) {
+            final controller = ref.read(profileController);
+            //TODO: burası gizli butona
+            bool ciftTiklama = false;
+
+            return InkWell(
+              child: const  SizedBox(
+                height: 30,
+                width: 30,
+              ),
+              onDoubleTap: () {
+                ciftTiklama = true;
+              },
+              onLongPress: () {
+                if(ciftTiklama){
+
+                  controller.ownersSayfasinaGit(context);
+                  ciftTiklama = false;
+                }
+                // Scaffold.of(context).openDrawer();
+              },
+            );
+          }
+        ),
         title: const Text('Hoşgeldiniz'),
         actions: [
           IconButton(
