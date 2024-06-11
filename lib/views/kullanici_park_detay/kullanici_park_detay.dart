@@ -339,7 +339,7 @@ class _DateAlertWidgetState extends State<DateAlertWidget> {
                 );
               },
               child: Text(
-                "Başlangıç Tarihi : $baslangic",
+                "Başlangıç Tarihi : ${DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(baslangic))}",
                 style: const TextStyle(color: Colors.black),
               )),
           TextButton(
@@ -366,7 +366,7 @@ class _DateAlertWidgetState extends State<DateAlertWidget> {
               );
             },
             child: Text(
-              "Bitiş Tarihi : ${bitis}",
+              "Bitiş Tarihi : ${DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(baslangic))}",
               style: const TextStyle(color: Colors.black),
             ),
           ),
