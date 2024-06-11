@@ -78,7 +78,7 @@ class _ParkScreenState extends State<ParkScreen> {
    */
 
   Future<String> calculateDrivingDistance(LatLng start, LatLng end) async {
-    const String apiKey = 'AIzaSyAl5TtsfNcQL0iLuG_STqqYcW5zgEV19no';
+    const String apiKey = 'AIzaSyApQCQl4hk466uZT_gGT_ecgmOHPWH0QYE';
     final String url =
         'https://maps.googleapis.com/maps/api/directions/json?origin=${start.latitude},${start.longitude}&destination=${end.latitude},${end
         .longitude}&key=$apiKey';
